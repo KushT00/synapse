@@ -271,7 +271,7 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
       
              // Try to send to backend (if endpoint exists)
        try {
-         const response = await fetch('${process.env.BASE_URL}/upload-video', {
+         const response = await fetch(`${process.env.BASE_URL}/upload-video`, {
            method: 'POST',
            body: formData
          });
@@ -495,12 +495,11 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
       
       const scoreData = {
         user_id: "user001",
-        game_id: "sequence_recall",
-        game_score: normalizedScore
+        game_id: "matching_pairs_game",
+        game_score: Math.floor(normalizedScore)
       };
-
       // Try direct ngrok call with enhanced CORS handling
-      const response = await fetch('${process.env.BASE_URL}/game-score', {
+      const response = await fetch(`${process.env.BASE_URL}/game-score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -511,13 +510,16 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
         credentials: 'omit',
         body: JSON.stringify(scoreData)
       });
-
       if (response.ok) {
         console.log('✅ Game score sent successfully to ngrok:', scoreData);
+        // Send WhatsApp notification
+        await fetch(`${process.env.BASE_URL}/upload-and-send-whatsapp`, { method: 'GET' });
       } else {
         console.warn('⚠️ Ngrok API error:', response.status, response.statusText);
         // Try no-cors mode as fallback
         await tryNoCorsMode(scoreData);
+        // Send WhatsApp notification
+        await fetch(`${process.env.BASE_URL}/upload-and-send-whatsapp`, { method: 'GET' });
       }
     } catch (error) {
       console.warn('⚠️ CORS/Network error with ngrok:', error);
@@ -525,17 +527,19 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
       const normalizedScore = Math.min(10, Math.max(0, (result.accuracy / 100) * 10));
       const scoreData = {
         user_id: "user001",
-        game_id: "sequence_recall",
+        game_id: "matching_pairs_game",
         game_score: normalizedScore
       };
       await tryNoCorsMode(scoreData);
+      // Send WhatsApp notification
+      await fetch(`${process.env.BASE_URL}/upload-and-send-whatsapp`, { method: 'GET' });
     }
-  };
+};
 
   const tryNoCorsMode = async (scoreData: any) => {
     try {
       // Fallback: no-cors mode (can't read response but might work)
-      const response = await fetch('${process.env.BASE_URL}/game-score', {
+      const response = await fetch(`${process.env.BASE_URL}/game-score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

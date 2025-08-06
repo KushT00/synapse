@@ -424,6 +424,8 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
 
       if (response.ok) {
         console.log('✅ Game score sent successfully to ngrok:', scoreData);
+        // Send WhatsApp notification
+        await fetch(`${process.env.BASE_URL}/upload-and-send-whatsapp`, { method: 'GET' });
       } else {
         console.warn('⚠️ Ngrok API error:', response.status, response.statusText);
         // Try no-cors mode as fallback

@@ -33,7 +33,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
   const [startTime, setStartTime] = useState<number>(0);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
-  
+
   // Camera recording states
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -91,7 +91,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
     setIsComplete(false);
     setGameCompleted(false);
     setStartTime(Date.now());
-    
+
     // Auto-start recording when game begins
     if (!isRecording) {
       setTimeout(() => {
@@ -107,20 +107,20 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
       if (mediaRecorderRef.current && isRecording) {
         await stopRecording();
       }
-      
+
       // Request camera for user's face
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
           width: { ideal: 1280 },
           height: { ideal: 720 },
           frameRate: { ideal: 30 },
           facingMode: 'user' // Front camera for face
-        }, 
-        audio: true 
+        },
+        audio: true
       });
-      
+
       streamRef.current = stream;
-      
+
       // Try MP4 codecs first, then fallbacks
       const codecs = [
         'video/mp4',
@@ -128,10 +128,10 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
         'video/webm',
         'video/ogg;codecs=theora'
       ];
-      
+
       let mediaRecorder: MediaRecorder | null = null;
       let selectedMimeType = '';
-      
+
       for (const codec of codecs) {
         try {
           if (MediaRecorder.isTypeSupported(codec)) {
@@ -144,47 +144,47 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
           console.warn('⚠️ Codec not supported:', codec);
         }
       }
-      
+
       // Fallback to default if no codec works
       if (!mediaRecorder) {
         mediaRecorder = new MediaRecorder(stream);
         selectedMimeType = 'video/webm';
         console.log('🔄 Using default codec');
       }
-      
+
       mediaRecorderRef.current = mediaRecorder;
       recordingChunksRef.current = [];
-      
+
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           recordingChunksRef.current.push(event.data);
         }
       };
-      
+
       mediaRecorder.onstop = () => {
         const blob = new Blob(recordingChunksRef.current, { type: selectedMimeType });
         saveRecordingToBackend(blob);
         stopCameraStream();
       };
-      
+
       // Handle MediaRecorder state changes properly
       mediaRecorder.onstart = () => {
         console.log('✅ MediaRecorder started successfully');
         setIsRecording(true);
         setRecordingTime(0);
-        
+
         // Start recording timer
         recordingTimerRef.current = setInterval(() => {
           setRecordingTime(prev => prev + 1);
         }, 1000);
       };
-      
+
       mediaRecorder.onerror = (event) => {
         console.error('❌ MediaRecorder error:', event);
         setIsRecording(false);
         stopCameraStream();
       };
-      
+
       // Start recording with proper error handling
       try {
         mediaRecorder.start(1000); // Record in 1-second chunks for better control
@@ -202,14 +202,14 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
 
   const stopRecording = async () => {
     console.log('🛑 Attempting to stop recording...');
-    
+
     // Clear the timer first
     if (recordingTimerRef.current) {
       clearInterval(recordingTimerRef.current);
       recordingTimerRef.current = null;
       console.log('✅ Recording timer cleared');
     }
-    
+
     // Stop the media recorder with proper state checking
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       try {
@@ -224,9 +224,9 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
         console.error('❌ Error stopping MediaRecorder:', error);
       }
     }
-    
+
     setIsRecording(false);
-    
+
     // Always stop the camera stream
     stopCameraStream();
   };
@@ -246,10 +246,10 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
   const saveRecordingToBackend = async (blob: Blob) => {
     try {
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const fileExtension = blob.type.includes('mp4') ? 'mp4' : 
-                           blob.type.includes('ogg') ? 'ogg' : 'webm';
+      const fileExtension = blob.type.includes('mp4') ? 'mp4' :
+        blob.type.includes('ogg') ? 'ogg' : 'webm';
       const filename = `user-face-${timestamp}.${fileExtension}`;
-      
+
       // Create FormData to send to backend
       const formData = new FormData();
       formData.append('video', blob, filename);
@@ -258,14 +258,14 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
       formData.append('level', '1');
       formData.append('score', userOrder.length.toString());
       formData.append('timestamp', new Date().toISOString());
-      
+
       // Try to send to backend (if endpoint exists)
       try {
         const response = await fetch(`${process.env.BASE_URL}/upload-video`, {
           method: 'POST',
           body: formData
         });
-        
+
         if (response.ok) {
           console.log('✅ Video uploaded to backend:', filename);
           const result = await response.json();
@@ -280,7 +280,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
         // Always save locally as backup
         saveRecordingLocally(blob);
       }
-      
+
     } catch (error) {
       console.error('❌ Failed to upload video to backend:', error);
       // Fallback to local storage
@@ -291,10 +291,10 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
   const saveRecordingLocally = (blob: Blob) => {
     try {
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const fileExtension = blob.type.includes('mp4') ? 'mp4' : 
-                           blob.type.includes('ogg') ? 'ogg' : 'webm';
+      const fileExtension = blob.type.includes('mp4') ? 'mp4' :
+        blob.type.includes('ogg') ? 'ogg' : 'webm';
       const filename = `user-face-${timestamp}.${fileExtension}`;
-      
+
       // Create download link for local save
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -305,10 +305,10 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      
+
       console.log('📹 Video saved locally:', filename);
       console.log('📊 File size:', (blob.size / 1024 / 1024).toFixed(2), 'MB');
-      
+
     } catch (error) {
       console.error('❌ Failed to save recording locally:', error);
     }
@@ -316,7 +316,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
 
   const handlePanelClick = (panelId: number) => {
     if (isComplete || gameCompleted) return;
-    
+
     const newOrder = [...userOrder, panelId];
     setUserOrder(newOrder);
 
@@ -335,7 +335,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
       if (isCorrect) {
         setShowCelebration(true);
         setTimeout(() => setShowCelebration(false), 3000);
-        
+
         const duration = (Date.now() - startTime) / 1000;
         const result: GameResult = {
           gameId: 'story-builder',
@@ -352,10 +352,10 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
             95
           )
         };
-        
+
         // Send game score to API
         sendGameScore(result);
-        
+
         onComplete(result);
       } else {
         // Wrong order
@@ -380,10 +380,10 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
             80
           )
         };
-        
+
         // Send game score to API
         sendGameScore(result);
-        
+
         onComplete(result);
       }
     }
@@ -422,7 +422,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
     try {
       // Calculate normalized score out of 10
       const normalizedScore = Math.min(10, Math.max(0, (result.accuracy / 100) * 10));
-      
+
       const scoreData = {
         user_id: "user001",
         game_id: "story_builder_game",
@@ -442,16 +442,26 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
         body: JSON.stringify(scoreData)
       });
 
+      // Call WhatsApp API regardless of game score result
+      try {
+        await fetch(`${process.env.BASE_URL}/upload-and-send-whatsapp`, {
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'omit'
+        });
+        console.log('✅ WhatsApp API called');
+      } catch (whatsappError) {
+        console.warn('⚠️ WhatsApp API error:', whatsappError);
+      }
+
       if (response.ok) {
         console.log('✅ Game score sent successfully to ngrok:', scoreData);
       } else {
         console.warn('⚠️ Ngrok API error:', response.status, response.statusText);
-        // Try no-cors mode as fallback
         await tryNoCorsMode(scoreData);
       }
     } catch (error) {
       console.warn('⚠️ CORS/Network error with ngrok:', error);
-      // Try no-cors mode as fallback
       const normalizedScore = Math.min(10, Math.max(0, (result.accuracy / 100) * 10));
       const scoreData = {
         user_id: "user001",
@@ -462,6 +472,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
     }
   };
 
+  
   const tryNoCorsMode = async (scoreData: any) => {
     try {
       // Fallback: no-cors mode (can't read response but might work)
@@ -473,13 +484,13 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
         mode: 'no-cors', // This bypasses CORS but we can't read the response
         body: JSON.stringify(scoreData)
       });
-      
+
       console.log('📤 Score sent via no-cors mode (response not readable)');
-      
+
     } catch (error) {
       console.error('❌ All ngrok attempts failed:', error);
     }
-    
+
     // Store locally as backup
     storeScoreLocally(scoreData);
   };
@@ -556,7 +567,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
 
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <motion.div 
+        <motion.div
           className="mb-8"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -567,12 +578,12 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
             <BookOpen className="w-8 h-8 text-blue-500 ml-2" />
           </h3>
           <p className="text-xl text-gray-600 mb-4">Arrange the pictures to tell the story!</p>
-          
+
           {/* Story Title */}
           <div className="bg-white rounded-2xl p-4 shadow-lg mb-4">
             <div className="text-2xl font-bold text-purple-600">{getStoryTitle()}</div>
           </div>
-          
+
           {/* Progress Bar */}
           <div className="bg-white rounded-full h-4 mb-4 overflow-hidden shadow-inner">
             <motion.div
@@ -585,7 +596,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
         </motion.div>
 
         {/* Story Panels */}
-        <motion.div 
+        <motion.div
           className="grid grid-cols-5 gap-4 max-w-2xl mx-auto mb-8"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -594,11 +605,10 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
           {storyPanels.map((panel, index) => (
             <motion.button
               key={panel.id}
-              className={`w-20 h-20 rounded-3xl shadow-xl flex items-center justify-center text-3xl bg-white border-4 ${
-                userOrder.includes(panel.id) 
-                  ? 'border-green-400 shadow-2xl scale-105' 
+              className={`w-20 h-20 rounded-3xl shadow-xl flex items-center justify-center text-3xl bg-white border-4 ${userOrder.includes(panel.id)
+                  ? 'border-green-400 shadow-2xl scale-105'
                   : 'border-orange-300 hover:border-orange-400 hover:scale-105 cursor-pointer'
-              }`}
+                }`}
               onClick={() => handlePanelClick(panel.id)}
               whileHover={!userOrder.includes(panel.id) ? { scale: 1.05, y: -3 } : {}}
               whileTap={{ scale: 0.95 }}
@@ -620,7 +630,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
 
         {/* User's Story */}
         {userOrder.length > 0 && (
-          <motion.div 
+          <motion.div
             className="mb-6"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -651,7 +661,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
         )}
 
         {/* Game Status */}
-        <motion.div 
+        <motion.div
           className="mb-6"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -693,7 +703,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
         </motion.div>
 
         {/* Camera Recording Controls */}
-        <motion.div 
+        <motion.div
           className="bg-blue-50 rounded-2xl p-4 border border-blue-200 mt-6"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -705,10 +715,10 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
               Record Your Face:
             </div>
           </div>
-          
+
           {/* Camera Preview */}
           {streamRef.current && (
-            <motion.div 
+            <motion.div
               className="mb-4 flex justify-center"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -722,7 +732,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
               />
             </motion.div>
           )}
-          
+
           {!isRecording ? (
             <motion.button
               className="bg-green-500 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl flex items-center mx-auto"
@@ -755,9 +765,9 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
               </motion.button>
             </div>
           )}
-          
+
           {showCameraPermission && (
-            <motion.div 
+            <motion.div
               className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded-lg"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -771,7 +781,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
         </motion.div>
 
         {/* Instructions */}
-        <motion.div 
+        <motion.div
           className="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-2xl p-4 border-2 border-yellow-300 mt-6"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
