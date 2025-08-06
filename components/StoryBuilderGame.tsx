@@ -261,7 +261,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
       
       // Try to send to backend (if endpoint exists)
       try {
-        const response = await fetch('https://cbbe772b924c.ngrok-free.app/upload-video', {
+        const response = await fetch(`${process.env.BASE_URL}/upload-video`, {
           method: 'POST',
           body: formData
         });
@@ -430,7 +430,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
       };
 
       // Try direct ngrok call with enhanced CORS handling
-      const response = await fetch('https://cbbe772b924c.ngrok-free.app/game-score', {
+      const response = await fetch(`${process.env.BASE_URL}/game-score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -465,7 +465,7 @@ export default function StoryBuilderGame({ onComplete }: GameProps) {
   const tryNoCorsMode = async (scoreData: any) => {
     try {
       // Fallback: no-cors mode (can't read response but might work)
-      const response = await fetch('https://cbbe772b924c.ngrok-free.app/game-score', {
+      const response = await fetch(`${process.env.BASE_URL}/game-score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

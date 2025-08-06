@@ -107,7 +107,7 @@ export default function MemoryPage() {
     
     // Send POST request when user starts playing
     try {
-      const response = await fetch('https://5038e2275417.ngrok-free.app/video-sent', {
+      const response = await fetch(`${process.env.BASE_URL}/video-sent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
