@@ -246,7 +246,7 @@ const EEGSessionUploader: React.FC<EEGSessionUploaderProps> = ({
       }, 200);
 
       // Send files to ngrok API
-      const response = await fetch(`${process.env.BASE_URL}/process-csv-files', {
+      const response = await fetch('https://5038e2275417.ngrok-free.app/process-csv-files', {
         method: 'POST',
         body: formData,
       });
@@ -255,7 +255,7 @@ const EEGSessionUploader: React.FC<EEGSessionUploaderProps> = ({
       setUploadProgress(100);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('HTTP error! status: ' + response.status);
       }
 
       const result = await response.json();
@@ -298,7 +298,7 @@ const EEGSessionUploader: React.FC<EEGSessionUploaderProps> = ({
     
     try {
       // Create a link that directly points to the PDF download URL
-      const downloadUrl = `${process.env.BASE_URL}/download-eeg-report/user001';
+      const downloadUrl = process.env.BASE_URL + '/download-eeg-report/user001';
       
       // Create a temporary link element and trigger the download
       const link = document.createElement('a');
@@ -312,7 +312,7 @@ const EEGSessionUploader: React.FC<EEGSessionUploaderProps> = ({
     } catch (error) {
       console.error('Download failed:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      alert(`Download failed: ${errorMessage}`);
+      alert('Download failed: ' + errorMessage);
     } finally {
       setIsDownloading(false);
     }

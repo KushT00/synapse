@@ -107,7 +107,7 @@ export default function MemoryPage() {
     
     // Send POST request when user starts playing
     try {
-      const response = await fetch(`${process.env.BASE_URL}/video-sent', {
+      const response = await fetch(`${process.env.BASE_URL}/video-sent`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -241,8 +241,8 @@ export default function MemoryPage() {
               className="bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer border-4 border-transparent hover:border-yellow-300"
               variants={itemVariants}
               whileHover={{ y: -12, scale: 1.03 }}
-              onClick={() => handleGameSelect(game.id)}
-            >
+              onClick={() => handleGameSelect(game.id)}>
+
               <div className="flex items-center justify-between mb-6">
                 <div className={`w-16 h-16 rounded-3xl flex items-center justify-center text-white shadow-lg ${game.color}`}>
                   {game.icon}
