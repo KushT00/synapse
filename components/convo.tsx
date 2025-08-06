@@ -168,7 +168,7 @@ return (
               <Radio className="w-8 h-8 text-black" />
             </motion.div>
 
-            <span className="font-bold text-black tracking-wide mb-3">Voice Assistant</span>
+            <span className="font-bold text-foreground tracking-wide mb-3">Voice Assistant</span>
 
             <div className="flex items-center mt-2 space-x-3">
               <motion.div
@@ -183,7 +183,7 @@ return (
                   boxShadow: { duration: 2, repeat: Infinity }
                 }}
               >
-                <Badge variant="outline" className="text-xs font-medium capitalize bg-white/10 backdrop-blur-sm border border-white/30 text-black px-3 py-1.5">
+                <Badge variant="outline" className="text-xs font-medium capitalize bg-white/10 backdrop-blur-sm border border-white/30 text-foreground px-3 py-1.5">
                   {conversation.status}
                 </Badge>
               </motion.div>
@@ -214,7 +214,7 @@ return (
                 transition={{ type: "spring", stiffness: 500, damping: 30 }}
               >
                 <Alert className="bg-white/10 backdrop-blur-sm border border-white/20 shadow-none rounded-xl">
-                  <AlertDescription className="flex items-center justify-between text-black text-sm font-medium">
+                  <AlertDescription className="flex items-center justify-between text-foreground text-sm font-medium">
                     {conversation.isSpeaking ? 'Assistant is speaking...' : 'Listening to you...'}
                     <AnimatePresence mode="wait">
                       {conversation.isSpeaking ? (
@@ -225,7 +225,7 @@ return (
                           exit={{ scale: 0.8, opacity: 0 }}
                           transition={{ duration: 0.2 }}
                         >
-                          <Volume2 className="w-5 h-5 text-black" />
+                          <Volume2 className="w-5 h-5 text-foreground" />
                         </motion.div>
                       ) : (
                         <motion.div
@@ -236,7 +236,7 @@ return (
                           transition={{ duration: 0.2 }}
                           className="relative"
                         >
-                          <Mic className="w-5 h-5 text-black" />
+                          <Mic className="w-5 h-5 text-foreground" />
                           <motion.div
                             className="absolute inset-0 rounded-full bg-black"
                             animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
@@ -256,7 +256,7 @@ return (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 0.6 }}
-                    className="text-center py-8 text-black italic text-sm"
+                    className="text-center py-8 text-foreground italic text-sm"
                   >
                     Start a conversation to see messages here
                   </motion.div>
@@ -268,7 +268,7 @@ return (
                     variants={messageVariants}
                     initial="hidden"
                     animate="visible"
-                    className={`p-3 rounded-2xl max-w-[85%] text-black backdrop-blur-sm ${msg.type === 'agent'
+                    className={`p-3 rounded-2xl max-w-[85%] text-foreground backdrop-blur-sm ${msg.type === 'agent'
                       ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 ml-auto border border-blue-400/30'
                       : 'bg-white/15 border border-white/20'
                       }`}
@@ -291,11 +291,11 @@ return (
                 disabled={conversation.status === 'connected'}
                 className={`w-32 transition-all duration-300 ease-in-out font-medium ${
                   conversation.status === 'connected' 
-                    ? 'bg-white/10 text-black hover:bg-white/10' 
-                    : 'bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-black shadow-lg hover:shadow-xl'
+                    ? 'bg-white/10 text-foreground hover:bg-white/10' 
+                    : 'bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-foreground shadow-lg hover:shadow-xl'
                 }`}
               >
-                <Mic className="w-4 h-4 mr-2 text-black" />
+                <Mic className="w-4 h-4 mr-2 text-foreground" />
                 <span>Start</span>
               </Button>
             </motion.div>
@@ -308,11 +308,11 @@ return (
                 disabled={conversation.status !== 'connected'}
                 className={`w-32 transition-all duration-300 ease-in-out font-medium ${
                   conversation.status !== 'connected'
-                    ? 'bg-white/10 text-black hover:bg-white/10'
+                    ? 'bg-white/10 text-foreground hover:bg-white/10'
                     : 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 shadow-lg hover:shadow-xl'
                 }`}
               >
-                <MicOff className="w-4 h-4 mr-2 text-black" />
+                <MicOff className="w-4 h-4 mr-2 text-foreground" />
                 <span>Stop</span>
               </Button>
             </motion.div>
@@ -324,7 +324,7 @@ return (
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowVolumeControls(!showVolumeControls)}
-                className="w-full flex items-center justify-center text-black text-xs hover:text-black hover:bg-white/10 transition-all"
+                className="w-full flex items-center justify-center text-foreground text-xs hover:text-foreground hover:bg-white/10 transition-all"
               >
                 <span>Volume Controls</span>
                 <motion.div
@@ -332,7 +332,7 @@ return (
                   transition={{ duration: 0.3 }}
                   className="ml-2"
                 >
-                  <ChevronDown className="w-3 h-3 text-black" />
+                                          <ChevronDown className="w-3 h-3 text-foreground" />
                 </motion.div>
               </Button>
             </motion.div>
@@ -351,10 +351,10 @@ return (
                       <Button
                         variant="outline"
                         size="icon"
-                        className="h-8 w-8 bg-white/10 border-white/20 hover:bg-white/20 text-black hover:text-black"
+                        className="h-8 w-8 bg-white/10 border-white/20 hover:bg-white/20 text-foreground hover:text-foreground"
                         onClick={() => handleVolumeChange([0])}
                       >
-                        <VolumeX className="h-4 w-4 text-black" />
+                        <VolumeX className="h-4 w-4 text-foreground" />
                       </Button>
                     </motion.div>
                     
@@ -373,10 +373,10 @@ return (
                       <Button
                         variant="outline"
                         size="icon"
-                        className="h-8 w-8 bg-white/10 border-white/20 hover:bg-white/20 text-black hover:text-black"
+                        className="h-8 w-8 bg-white/10 border-white/20 hover:bg-white/20 text-foreground hover:text-foreground"
                         onClick={() => handleVolumeChange([1])}
                       >
-                        <Volume2 className="h-4 w-4 text-black" />
+                        <Volume2 className="h-4 w-4 text-foreground" />
                       </Button>
                     </motion.div>
                   </div>
