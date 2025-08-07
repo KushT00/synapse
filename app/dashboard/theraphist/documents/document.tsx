@@ -246,7 +246,7 @@ const EEGSessionUploader: React.FC<EEGSessionUploaderProps> = ({
       }, 200);
 
       // Send files to ngrok API
-      const response = await fetch('https://5038e2275417.ngrok-free.app/process-csv-files', {
+      const response = await fetch('http://localhost:8000/process-csv-files', {
         method: 'POST',
         body: formData,
       });
