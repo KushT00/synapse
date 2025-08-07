@@ -252,7 +252,7 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
       
       // Try to send to backend (if endpoint exists)
       try {
-        const response = await fetch(`${process.env.BASE_URL}/upload-video`, {
+        const response = await fetch(`http://localhost:8000/upload-video`, {
           method: 'POST',
           body: formData
         });
@@ -410,7 +410,7 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
       };
 
       // Try direct ngrok call with enhanced CORS handling
-      const response = await fetch(`${process.env.BASE_URL}/game-score`, {
+      const response = await fetch(`http://localhost:8000/game-score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -425,7 +425,7 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
       if (response.ok) {
         console.log('✅ Game score sent successfully to ngrok:', scoreData);
         // Send WhatsApp notification
-        await fetch(`${process.env.BASE_URL}/upload-and-send-whatsapp`, { method: 'GET' });
+        await fetch(`http://localhost:8000/upload-and-send-whatsapp`, { method: 'GET' });
       } else {
         console.warn('⚠️ Ngrok API error:', response.status, response.statusText);
         // Try no-cors mode as fallback
@@ -447,7 +447,7 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
   const tryNoCorsMode = async (scoreData: any) => {
     try {
       // Fallback: no-cors mode (can't read response but might work)
-      const response = await fetch(`${process.env.BASE_URL}/game-score`, {
+      const response = await fetch(`http://localhost:8000/game-score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
