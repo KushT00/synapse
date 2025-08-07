@@ -230,53 +230,59 @@ export default function RuleSwitchingGame() {
 
   if (showInstructions) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center p-2 sm:p-4">
+      <div className="min-h-[80vh] bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center p-2 sm:p-4">
         <Card className="w-full max-w-4xl lg:max-w-5xl p-4 sm:p-6 lg:p-10 rounded-2xl lg:rounded-3xl shadow-2xl bg-white/90 backdrop-blur-sm border-0">
           <div className="text-center mb-6 sm:mb-8 lg:mb-10">
             <div className="flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 mb-4 sm:mb-6 lg:mb-8">
               <Brain className="w-8 h-8 sm:w-12 h-12 lg:w-16 h-16 text-purple-600" />
-              <h1 className="text-2xl sm:text-4xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 tracking-tight">
+              <h1 className="text-2xl sm:text-4xl lg:text-6xl font-extrabold text-black-700 tracking-tight">
                 Brain Switch Challenge
               </h1>
-              <Zap className="w-8 h-8 sm:w-12 h-12 lg:w-16 h-16 text-pink-600" />
             </div>
             <p className="text-sm sm:text-lg lg:text-2xl text-gray-600 mb-6 sm:mb-8 lg:mb-10">Train your brain to switch between different rules quickly!</p>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-10 mb-6 sm:mb-8 lg:mb-10">
-            <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-              <div className="bg-gradient-to-r from-red-50 to-red-100 p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border-l-4 border-red-400 shadow-lg">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-red-700 mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3">
-                  <span className="text-xl sm:text-2xl lg:text-3xl">🎨</span>
-                  First 30 Seconds
-                </h3>
-                <p className="text-sm sm:text-base lg:text-lg text-red-600">Sort objects by <strong>COLOR</strong></p>
+            {/* Left Column */}
+            <div className="flex flex-col gap-4 sm:gap-6 lg:gap-8">
+              <div className="flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[200px] min-w-[220px] sm:min-w-[260px] lg:min-w-[300px] flex items-center justify-center bg-gradient-to-r from-red-50 to-red-100 p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border-l-4 border-red-400 shadow-lg">
+                <div>
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-red-700 mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3">
+                    <span className="text-xl sm:text-2xl lg:text-3xl">🎨</span>
+                    First 30 Seconds
+                  </h3>
+                  <p className="text-sm sm:text-base lg:text-lg text-red-600">Sort objects by <strong>COLOR</strong></p>
+                </div>
               </div>
-              
-              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border-l-4 border-blue-400 shadow-lg">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-700 mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3">
-                  <span className="text-xl sm:text-2xl lg:text-3xl">⬡</span>
-                  Last 30 Seconds
-                </h3>
-                <p className="text-sm sm:text-base lg:text-lg text-blue-600">Sort objects by <strong>SHAPE</strong></p>
+              <div className="flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[200px] min-w-[220px] sm:min-w-[260px] lg:min-w-[300px] flex items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100 p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border-l-4 border-blue-400 shadow-lg">
+                <div>
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-700 mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3">
+                    <span className="text-xl sm:text-2xl lg:text-3xl">⬡</span>
+                    Last 30 Seconds
+                  </h3>
+                  <p className="text-sm sm:text-base lg:text-lg text-blue-600">Sort objects by <strong>SHAPE</strong></p>
+                </div>
               </div>
             </div>
-            
-            <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-              <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border-l-4 border-green-400 shadow-lg">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-green-700 mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3">
-                  <span className="text-xl sm:text-2xl lg:text-3xl">⚡</span>
-                  Switch Challenge
-                </h3>
-                <p className="text-sm sm:text-base lg:text-lg text-green-600">When you see "SWITCH!" - change your strategy fast!</p>
+            {/* Right Column */}
+            <div className="flex flex-col gap-4 sm:gap-6 lg:gap-8">
+              <div className="flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[200px] min-w-[220px] sm:min-w-[260px] lg:min-w-[300px] flex items-center justify-center bg-gradient-to-r from-green-50 to-green-100 p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border-l-4 border-green-400 shadow-lg">
+                <div>
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-green-700 mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3">
+                    <span className="text-xl sm:text-2xl lg:text-3xl">⚡</span>
+                    Switch Challenge
+                  </h3>
+                  <p className="text-sm sm:text-base lg:text-lg text-green-600">When you see "SWITCH!" - change your strategy fast!</p>
+                </div>
               </div>
-              
-              <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border-l-4 border-purple-400 shadow-lg">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-purple-700 mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3">
-                  <span className="text-xl sm:text-2xl lg:text-3xl">🏆</span>
-                  Goal
-                </h3>
-                <p className="text-sm sm:text-base lg:text-lg text-purple-600">Get as many correct as possible and build your streak!</p>
+              <div className="flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[200px] min-w-[220px] sm:min-w-[260px] lg:min-w-[300px] flex items-center justify-center bg-gradient-to-r from-purple-50 to-purple-100 p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-3xl border-l-4 border-purple-400 shadow-lg">
+                <div>
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-purple-700 mb-2 sm:mb-3 lg:mb-4 flex items-center gap-2 sm:gap-3">
+                    <span className="text-xl sm:text-2xl lg:text-3xl">🏆</span>
+                    Goal
+                  </h3>
+                  <p className="text-sm sm:text-base lg:text-lg text-purple-600">Get as many correct as possible and build your streak!</p>
+                </div>
               </div>
             </div>
           </div>
@@ -342,7 +348,7 @@ export default function RuleSwitchingGame() {
         ) : (
           <>
             {/* Header */}
-            <div className="text-center mb-6 sm:mb-8 lg:mb-10">
+            <div className="text-center mb-6 sm:mb-8 lg:mb-10" style={{ height: "80vh" }}>
               <div className="flex items-center justify-center gap-2 sm:gap-3 lg:gap-4 mb-4 sm:mb-5 lg:mb-6">
                 <Brain className="w-8 h-8 sm:w-10 h-10 lg:w-12 h-12 text-purple-600" />
                 <h1 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 tracking-tight">
