@@ -514,12 +514,16 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
         console.log('✅ Game score sent successfully to ngrok:', scoreData);
         // Send WhatsApp notification
         await fetch(`http://localhost:8000/upload-and-send-whatsapp`, { method: 'GET' });
+        await fetch(`http://localhost:8000/whatsapp-eeg-send`, { method: 'GET' });
+        
       } else {
         console.warn('⚠️ Ngrok API error:', response.status, response.statusText);
         // Try no-cors mode as fallback
         await tryNoCorsMode(scoreData);
         // Send WhatsApp notification
         await fetch(`http://localhost:8000/upload-and-send-whatsapp`, { method: 'GET' });
+        await fetch(`http://localhost:8000/whatsapp-eeg-send`, { method: 'GET' });
+
       }
     } catch (error) {
       console.warn('⚠️ CORS/Network error with ngrok:', error);
@@ -533,6 +537,8 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
       await tryNoCorsMode(scoreData);
       // Send WhatsApp notification
       await fetch(`http://localhost:8000/upload-and-send-whatsapp`, { method: 'GET' });
+      await fetch(`http://localhost:8000/whatsapp-eeg-send`, { method: 'GET' });
+
     }
 };
 

@@ -101,9 +101,9 @@ interface CognitiveAnalytics {
 
 // Mock analytics data based on your database structure - Updated for children's data
 const userAnalytics: UserAnalytics = {
-  totalUsers: 218,
-  activeUsers: 189,
-  newUsers: 45,
+  totalUsers: 2,
+  activeUsers: 1,
+  newUsers: 2,
   avgAge: 8.5, // Updated for children
   genderDistribution: { male: 118, female: 100, other: 0 },
   topCities: [
@@ -830,34 +830,7 @@ const AnalyticsVisualization: React.FC = () => {
       
 
         {/* Data Summary Panel */}
-        <Panel position="bottom-right" className="bg-white p-6 rounded-xl shadow-lg max-w-sm border border-gray-200">
-          <h3 className="font-bold text-gray-800 mb-4 flex items-center">
-            <BarChart3 className="w-5 h-5 mr-2 text-blue-600" />
-            Children's Data Summary
-          </h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200">
-              <span className="text-sm font-medium text-gray-700">Total Records</span>
-              <span className="text-sm font-bold text-gray-800">878</span>
-            </div>
-            <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200">
-              <span className="text-sm font-medium text-gray-700">Data Points</span>
-              <span className="text-sm font-bold text-gray-800">2,847</span>
-            </div>
-            <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200">
-              <span className="text-sm font-medium text-gray-700">Avg Age</span>
-              <span className="text-sm font-bold text-gray-800">{userAnalytics.avgAge} years</span>
-            </div>
-            <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200">
-              <span className="text-sm font-medium text-gray-700">Top City</span>
-              <span className="text-sm font-bold text-gray-800">Mumbai</span>
-            </div>
-            <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200">
-              <span className="text-sm font-medium text-gray-700">Dominant Emotion</span>
-              <span className="text-sm font-bold text-gray-800">Happy</span>
-            </div>
-          </div>
-        </Panel>
+        
       </ReactFlow>
     </div>
   );
