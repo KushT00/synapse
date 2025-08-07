@@ -107,7 +107,7 @@ export default function MemoryPage() {
     
     // Send POST request when user starts playing
     try {
-      const response = await fetch(`${process.env.BASE_URL}/video-sent`, {
+      const response = await fetch(`http://localhost:8000/video-sent`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
