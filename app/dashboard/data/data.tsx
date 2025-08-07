@@ -760,70 +760,7 @@ const AnalyticsVisualization: React.FC = () => {
           style={{ backgroundColor: '#ffffff', border: '2px solid #e5e7eb' }}
         />
         
-        {/* Analytics Overview Panel */}
-        <Panel position="top-left" className="bg-white p-6 rounded-xl shadow-lg max-w-sm border border-gray-200">
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <Activity className="w-6 h-6 text-blue-600" />
-              <h2 className="text-xl font-bold text-gray-800">Children's Analytics</h2>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border border-blue-200">
-                <div className="text-sm text-gray-700 space-y-2">
-                  <div className="flex justify-between">
-                    <span className="font-medium">Total Children:</span>
-                    <span className="text-blue-600">{userAnalytics.totalUsers}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">Games Played:</span>
-                    <span className="text-blue-600">{gameAnalytics.totalGames}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">Emotion Tests:</span>
-                    <span className="text-blue-600">{emotionAnalytics.totalTests}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">Avg Age:</span>
-                    <span className="text-blue-600">{userAnalytics.avgAge} years</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-green-50 p-3 rounded-lg text-center border border-green-200">
-                  <div className="text-lg font-bold text-green-600">{userAnalytics.activeUsers}</div>
-                  <div className="text-xs text-green-600">Active Children</div>
-                </div>
-                <div className="bg-purple-50 p-3 rounded-lg text-center border border-purple-200">
-                  <div className="text-lg font-bold text-purple-600">{gameAnalytics.avgScore}</div>
-                  <div className="text-xs text-purple-600">Avg Score</div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <button
-                  onClick={handleFitView}
-                  className="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all text-sm font-medium shadow-md"
-                >
-                  <Zap className="w-4 h-4 inline mr-2" />
-                  Fit View
-                </button>
-                <button
-                  onClick={toggleConnectionLabels}
-                  className={`w-full px-4 py-2 rounded-lg transition-all text-sm font-medium shadow-md ${
-                    showConnectionLabels 
-                      ? 'bg-green-600 text-white hover:bg-green-700' 
-                      : 'bg-gray-600 text-white hover:bg-gray-700'
-                  }`}
-                >
-                  <Link className="w-4 h-4 inline mr-2" />
-                  {showConnectionLabels ? 'Hide Labels' : 'Show Labels'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </Panel>
+       
 
         {/* Category Filter Panel */}
         {/* <Panel position="bottom-left" className="bg-white mt-15 p-6 rounded-xl shadow-lg max-w-sm border border-gray-200">

@@ -252,7 +252,7 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
       
       // Try to send to backend (if endpoint exists)
       try {
-        const response = await fetch(`http://localhost:8000/upload-video`, {
+        const response = await fetch(`http://localhost:8000//upload-and-send-whatsapp`, {
           method: 'POST',
           body: formData
         });
