@@ -70,16 +70,16 @@ const ProgressIndicator = ({ currentStep, totalSteps }: { currentStep: number; t
 
 const FamilyIllustration = () => (
   <div className="flex justify-center mb-8">
-    <div className="w-48 h-32 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center">
-      <div className="text-6xl">👨‍👩‍👧‍👦</div>
+    <div className="w-48 h-32 bg-gradient-to-br from-emerald-100 to-sky-100 rounded-2xl flex items-center justify-center">
+      <div className="text-6xl">🎓</div>
     </div>
   </div>
 );
 
 const ChildrenPlayingIllustration = () => (
   <div className="flex justify-center mb-8">
-    <div className="w-48 h-32 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-2xl flex items-center justify-center">
-      <div className="text-6xl">🧒👧🧑</div>
+    <div className="w-48 h-32 bg-gradient-to-br from-emerald-100 to-sky-100 rounded-2xl flex items-center justify-center">
+      <div className="text-6xl">🧑‍🎓👩‍🎓</div>
     </div>
   </div>
 );
@@ -88,8 +88,8 @@ const Screen3ChildInfo = ({ childInfo, setChildInfo }: { childInfo: ChildInfo; s
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const genderOptions = [
-    { id: 'boy', label: 'Boy', icon: '👦' },
-    { id: 'girl', label: 'Girl', icon: '👧' },
+    { id: 'male', label: 'Male', icon: '👨' },
+    { id: 'female', label: 'Female', icon: '👩' },
     { id: 'non-binary', label: 'Non-binary', icon: '🌟' },
     { id: 'prefer-not-to-say', label: 'Prefer not to say', icon: '🤷' },
   ];
@@ -103,63 +103,44 @@ const Screen3ChildInfo = ({ childInfo, setChildInfo }: { childInfo: ChildInfo; s
       <FamilyIllustration />
       
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-foreground">Tell Us About Your Amazing Child</h2>
+        <h2 className="text-2xl font-bold text-foreground">Tell Us About Yourself</h2>
       </div>
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="childName" className="text-sm font-medium">Child's Name/Nickname</Label>
+          <Label htmlFor="studentName" className="text-sm font-medium">Student Name</Label>
           <Input
-            id="childName"
-            placeholder="What does your child like to be called?"
+            id="studentName"
+            placeholder="Your full name"
             value={childInfo.name}
             onChange={(e) => setChildInfo({ ...childInfo, name: e.target.value })}
             className="mt-1"
           />
-          <p className="text-xs text-muted-foreground mt-1">This name will appear throughout the app</p>
         </div>
 
         <div>
-          <Label className="text-sm font-medium">Date of Birth</Label>
-          <Button
-            variant="outline"
-            onClick={() => setShowDatePicker(!showDatePicker)}
-            className="w-full mt-1 justify-start"
-          >
-            <Calendar className="w-4 h-4 mr-2" />
-            {childInfo.dateOfBirth || "Select date of birth"}
-          </Button>
-          {showDatePicker && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="mt-2 p-4 border rounded-lg bg-card"
-            >
-              <Input
-                type="date"
-                value={childInfo.dateOfBirth}
-                onChange={(e) => setChildInfo({ ...childInfo, dateOfBirth: e.target.value })}
-              />
-            </motion.div>
-          )}
+          <Label htmlFor="year" className="text-sm font-medium">Year / Semester</Label>
+          <Input
+            id="year"
+            placeholder="e.g., 2nd year, Sem 4"
+            value={childInfo.dateOfBirth}
+            onChange={(e) => setChildInfo({ ...childInfo, dateOfBirth: e.target.value })}
+            className="mt-1"
+          />
         </div>
 
         <div>
-          <Label className="text-sm font-medium mb-3 block">Gender (Optional)</Label>
-          <div className="grid grid-cols-2 gap-2">
-            {genderOptions.map((option) => (
-              <Button
-                key={option.id}
-                variant={childInfo.gender === option.id ? "default" : "outline"}
-                onClick={() => setChildInfo({ ...childInfo, gender: option.id })}
-                className="h-auto p-3 flex flex-col items-center gap-2"
-              >
-                <span className="text-2xl">{option.icon}</span>
-                <span className="text-xs">{option.label}</span>
-              </Button>
-            ))}
-          </div>
+          <Label htmlFor="dept" className="text-sm font-medium">Department / Program</Label>
+          <Input
+            id="dept"
+            placeholder="e.g., Computer Science"
+            value={childInfo.gender}
+            onChange={(e) => setChildInfo({ ...childInfo, gender: e.target.value })}
+            className="mt-1"
+          />
         </div>
+
+        
       </div>
     </motion.div>
   );
@@ -167,15 +148,12 @@ const Screen3ChildInfo = ({ childInfo, setChildInfo }: { childInfo: ChildInfo; s
 
 const Screen4Challenges = ({ preferences, setPreferences }: { preferences: UserPreferences; setPreferences: (prefs: UserPreferences) => void }) => {
   const challenges = [
-    { id: 'attention', label: 'Attention & Focus', icon: '🎯' },
-    { id: 'memory', label: 'Memory', icon: '🧠' },
-    { id: 'problem-solving', label: 'Problem Solving', icon: '🧩' },
-    { id: 'communication', label: 'Communication', icon: '💬' },
-    { id: 'emotional', label: 'Emotional Regulation', icon: '😊' },
-    { id: 'social', label: 'Social Skills', icon: '👥' },
-    { id: 'academic', label: 'Academic Skills', icon: '📚' },
-    { id: 'fine-motor', label: 'Fine Motor Skills', icon: '🎨' },
-    { id: 'gross-motor', label: 'Gross Motor Skills', icon: '🤸' },
+    { id: 'anxiety', label: 'Anxiety / Worry', icon: '😟' },
+    { id: 'low-mood', label: 'Low Mood', icon: '😔' },
+    { id: 'sleep', label: 'Sleep Issues', icon: '😴' },
+    { id: 'burnout', label: 'Burnout / Exhaustion', icon: '🥱' },
+    { id: 'academic-stress', label: 'Academic Stress', icon: '📚' },
+    { id: 'social-isolation', label: 'Social Isolation', icon: '🧍' },
     { id: 'not-sure', label: 'Not Sure', icon: '❓' },
   ];
 
@@ -195,8 +173,8 @@ const Screen4Challenges = ({ preferences, setPreferences }: { preferences: UserP
       <ChildrenPlayingIllustration />
       
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-foreground">Help Us Understand Your Child's Unique Journey</h2>
-        <p className="text-muted-foreground">This information is confidential and helps us personalize the experience</p>
+        <h2 className="text-2xl font-bold text-foreground">What Are You Struggling With Lately?</h2>
+        <p className="text-muted-foreground">This helps us personalize your suggestions. Your responses are confidential.</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -229,14 +207,12 @@ const Screen4Challenges = ({ preferences, setPreferences }: { preferences: UserP
 
 const Screen5Goals = ({ preferences, setPreferences }: { preferences: UserPreferences; setPreferences: (prefs: UserPreferences) => void }) => {
   const goals = [
-    { id: 'academic-improvement', label: 'Academic Improvement', icon: '📈' },
-    { id: 'confidence-building', label: 'Confidence Building', icon: '💪' },
-    { id: 'social-skills', label: 'Social Skills', icon: '🤝' },
-    { id: 'emotional-regulation', label: 'Emotional Regulation', icon: '🧘' },
-    { id: 'focus-attention', label: 'Focus & Attention', icon: '🎯' },
-    { id: 'creativity', label: 'Creativity', icon: '🎨' },
-    { id: 'problem-solving', label: 'Problem Solving', icon: '🧩' },
-    { id: 'independence', label: 'Independence', icon: '🌟' },
+    { id: 'reduce-anxiety', label: 'Reduce Anxiety', icon: '🫶' },
+    { id: 'improve-mood', label: 'Improve Mood', icon: '🌤️' },
+    { id: 'better-sleep', label: 'Sleep Better', icon: '🛌' },
+    { id: 'manage-stress', label: 'Manage Stress', icon: '🧘' },
+    { id: 'build-support', label: 'Build Support Network', icon: '🤝' },
+    { id: 'academic-balance', label: 'Balance Academics & Wellbeing', icon: '📘' },
   ];
 
   const toggleGoal = (goalId: string) => {
@@ -253,8 +229,8 @@ const Screen5Goals = ({ preferences, setPreferences }: { preferences: UserPrefer
       className="max-w-2xl mx-auto space-y-6"
     >
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-foreground">What Are Your Learning Goals?</h2>
-        <p className="text-muted-foreground">Select the areas you'd like to focus on</p>
+        <h2 className="text-2xl font-bold text-foreground">What Are Your Wellbeing Goals?</h2>
+        <p className="text-muted-foreground">Select what you'd like to work on first</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -287,16 +263,12 @@ const Screen5Goals = ({ preferences, setPreferences }: { preferences: UserPrefer
 
 const Screen6Interests = ({ preferences, setPreferences }: { preferences: UserPreferences; setPreferences: (prefs: UserPreferences) => void }) => {
   const interests = [
-    { id: 'animals', label: 'Animals', icon: '🐾' },
-    { id: 'space', label: 'Space', icon: '🚀' },
-    { id: 'art', label: 'Art & Drawing', icon: '🎨' },
-    { id: 'music', label: 'Music', icon: '🎵' },
-    { id: 'sports', label: 'Sports', icon: '⚽' },
-    { id: 'nature', label: 'Nature', icon: '🌿' },
-    { id: 'technology', label: 'Technology', icon: '💻' },
-    { id: 'books', label: 'Books & Stories', icon: '📚' },
-    { id: 'cooking', label: 'Cooking', icon: '👨‍🍳' },
-    { id: 'games', label: 'Games', icon: '🎮' },
+    { id: 'self-help', label: 'Self‑help Content', icon: '📘' },
+    { id: 'relaxation', label: 'Relaxation Audio', icon: '🎧' },
+    { id: 'sleep', label: 'Sleep Routines', icon: '🌙' },
+    { id: 'peer-support', label: 'Peer Support', icon: '👥' },
+    { id: 'mindfulness', label: 'Mindfulness', icon: '🧘' },
+    { id: 'time-management', label: 'Time Management', icon: '⏰' },
   ];
 
   const toggleInterest = (interestId: string) => {
@@ -313,8 +285,8 @@ const Screen6Interests = ({ preferences, setPreferences }: { preferences: UserPr
       className="max-w-2xl mx-auto space-y-6"
     >
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-foreground">What Does Your Child Love?</h2>
-        <p className="text-muted-foreground">We'll use these interests to make learning more engaging</p>
+        <h2 className="text-2xl font-bold text-foreground">Your Preferences</h2>
+        <p className="text-muted-foreground">Pick what would help you most right now</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -711,7 +683,7 @@ const OnboardingFlow = () => {
     notifications: true
   });
 
-  const totalSteps = 12;
+  const totalSteps = 6;
 
   const steps: OnboardingStep[] = [
     {
@@ -735,39 +707,9 @@ const OnboardingFlow = () => {
       component: <Screen6Interests preferences={preferences} setPreferences={setPreferences} />
     },
     {
-      id: 7,
-      title: "Avatar Selection",
-      component: <Screen7Avatar preferences={preferences} setPreferences={setPreferences} />
-    },
-    {
-      id: 8,
-      title: "Accessibility Preferences",
-      component: <Screen8Accessibility preferences={preferences} setPreferences={setPreferences} />
-    },
-    {
       id: 9,
       title: "Language Selection",
       component: <Screen9Language preferences={preferences} setPreferences={setPreferences} />
-    },
-    {
-      id: 10,
-      title: "Learning Schedule",
-      component: <Screen10Schedule preferences={preferences} setPreferences={setPreferences} />
-    },
-    {
-      id: 11,
-      title: "Goals & Expectations",
-      component: <Screen11Expectations />
-    },
-    {
-      id: 12,
-      title: "Dashboard Overview",
-      component: <Screen12Dashboard />
-    },
-    {
-      id: 13,
-      title: "Notification Preferences",
-      component: <Screen13Notifications preferences={preferences} setPreferences={setPreferences} />
     },
     {
       id: 14,
@@ -797,7 +739,7 @@ const handleNext = () => {
   const currentStepData = steps[currentStep - 1];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-sky-50 to-white p-4">
       <div className="max-w-4xl mx-auto">
         <ProgressIndicator currentStep={currentStep} totalSteps={totalSteps} />
         

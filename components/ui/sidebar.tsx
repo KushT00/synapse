@@ -24,6 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { useEffect, useState } from "react"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -340,14 +341,44 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function SidebarFooter({ className, ...props }: React.ComponentProps<"div">) {
+function SidebarFooter({ className, children, ...props }: React.ComponentProps<"div">) {
+  const [scores, setScores] = useState<{ phq9?: any; phq12?: any; gad7?: any }>()
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    try {
+      const phq9 = JSON.parse(window.localStorage.getItem("synapse_phq9") || "null")
+      const phq12 = JSON.parse(window.localStorage.getItem("synapse_phq12") || "null")
+      const gad7 = JSON.parse(window.localStorage.getItem("synapse_gad7") || "null")
+      setScores({ phq9, phq12, gad7 })
+    } catch {
+      setScores(undefined)
+    }
+  }, [])
+
   return (
     <div
       data-slot="sidebar-footer"
       data-sidebar="footer"
       className={cn("flex flex-col gap-2 p-2", className)}
       {...props}
-    />
+    >
+      {children}
+      {scores && (scores.phq9 || scores.phq12 || scores.gad7) && (
+        <div className="rounded-md border text-xs p-2">
+          <div className="font-medium mb-1">Recent Screens</div>
+          {scores.phq9 && (
+            <div className="flex justify-between"><span>Depression</span><span>{scores.phq9.score} ({scores.phq9.severity})</span></div>
+          )}
+          {scores.phq12 && (
+            <div className="flex justify-between"><span>Wellbeing</span><span>{scores.phq12.score} ({scores.phq12.severity})</span></div>
+          )}
+          {scores.gad7 && (
+            <div className="flex justify-between"><span>Anxiety</span><span>{scores.gad7.score} ({scores.gad7.severity})</span></div>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -371,7 +402,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
         className
       )}
       {...props}

@@ -59,11 +59,11 @@ const AssessmentCard = () => {
   );
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#030303]">
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-emerald-50 via-sky-50 to-white">
       <FloatingOrbs />
 
       <div
-        className={`relative z-10 bg-white/5 backdrop-blur-md rounded-3xl border border-white/10 shadow-2xl p-10 transition-all duration-700 hover:shadow-3xl hover:scale-[1.02] w-full max-w-3xl mx-auto ${
+        className={`relative z-10 bg-white rounded-3xl border border-emerald-100 shadow-xl p-10 transition-all duration-700 hover:shadow-2xl hover:scale-[1.02] w-full max-w-3xl mx-auto ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
         style={{ transitionDelay: "200ms" }}
@@ -77,10 +77,10 @@ const AssessmentCard = () => {
 
           <div className="flex-1 text-center lg:text-left">
             <div className="mb-6">
-              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4 bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-emerald-600 to-sky-600 bg-clip-text text-transparent">
                 Initial Assessment
               </h2>
-              <p className="text-white/70 text-lg leading-relaxed max-w-2xl">
+              <p className="text-slate-600 text-lg leading-relaxed max-w-2xl">
                 A comprehensive evaluation designed to understand your unique
                 cognitive profile and create a personalized training
                 experience.
@@ -88,29 +88,29 @@ const AssessmentCard = () => {
             </div>
 
             <div className="flex flex-wrap gap-4 mb-8 justify-center lg:justify-start">
-              <div className="flex items-center gap-2 bg-indigo-500/10 px-4 py-2 rounded-full">
-                <Target className="w-4 h-4 text-indigo-400" />
-                <span className="text-sm font-medium text-indigo-200">
+              <div className="flex items-center gap-2 bg-indigo-100 px-4 py-2 rounded-full border border-indigo-200">
+                <Target className="w-4 h-4 text-indigo-600" />
+                <span className="text-sm font-medium text-indigo-700">
                   Personalized
                 </span>
               </div>
-              <div className="flex items-center gap-2 bg-emerald-500/10 px-4 py-2 rounded-full">
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm font-medium text-emerald-200">
+              <div className="flex items-center gap-2 bg-emerald-100 px-4 py-2 rounded-full border border-emerald-200">
+                <TrendingUp className="w-4 h-4 text-emerald-600" />
+                <span className="text-sm font-medium text-emerald-700">
                   Adaptive
                 </span>
               </div>
-              <div className="flex items-center gap-2 bg-amber-500/10 px-4 py-2 rounded-full">
-                <Zap className="w-4 h-4 text-amber-400" />
-                <span className="text-sm font-medium text-amber-200">
+              <div className="flex items-center gap-2 bg-amber-100 px-4 py-2 rounded-full border border-amber-200">
+                <Zap className="w-4 h-4 text-amber-600" />
+                <span className="text-sm font-medium text-amber-700">
                   Efficient
                 </span>
               </div>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-              <button className="group bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold px-10 py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-3"
-               onClick={() => window.location.href = '/eval_game2'}>
+              <button className="group bg-sky-600 hover:bg-sky-700 text-white font-semibold px-10 py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-3"
+               onClick={() => window.location.href = '/eval_game1'}>
                 <Play className="w-5 h-5" />
                 Continue Assessment
                 <ChevronRight
@@ -120,7 +120,7 @@ const AssessmentCard = () => {
                 />
               </button>
 
-              <div className="flex items-center gap-2 text-white/50">
+              <div className="flex items-center gap-2 text-slate-500">
                 <Clock className="w-4 h-4" />
                 <span className="text-sm font-medium">~20 minutes</span>
               </div>
