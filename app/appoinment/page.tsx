@@ -15,29 +15,30 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   const counselors = [
-    {
-      id: '1',
-      name: 'Dr. Sarah Wilson',
-      specializations: ['Anxiety', 'Depression', 'Academic Stress'],
-      rating: 4.8,
-      availability: ['Monday', 'Wednesday', 'Friday'],
-      image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face'
-    },
+   
     {
       id: '2',
-      name: 'Dr. Michael Chen',
-      specializations: ['Relationship Issues', 'Social Anxiety', 'Sleep Disorders'],
+      name: 'Dr. Arjun Patel',
+      specializations: ['Relationship Issues', 'Social Anxiety', 'Study Stress'],
       rating: 4.9,
       availability: ['Tuesday', 'Thursday', 'Saturday'],
       image: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=150&h=150&fit=crop&crop=face'
     },
     {
       id: '3',
-      name: 'Dr. Priya Sharma',
-      specializations: ['Cultural Issues', 'Family Problems', 'Self-esteem'],
+      name: 'Dr. Kavya Reddy',
+      specializations: ['Cultural Conflicts', 'Self-esteem', 'Peer Pressure'],
       rating: 4.7,
       availability: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'],
-      image: 'https://images.unsplash.com/photo-1594824020648-7bed8c5ca2b8?w=150&h=150&fit=crop&crop=face'
+      image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face'
+    },
+    {
+      id: '4',
+      name: 'Dr. Rajesh Kumar',
+      specializations: ['Depression', 'Exam Anxiety', 'Adjustment Issues'],
+      rating: 4.6,
+      availability: ['Wednesday', 'Thursday', 'Friday'],
+      image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face'
     }
   ];
 
@@ -49,8 +50,8 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
   const upcomingAppointments = [
     {
       id: '1',
-      counselor: 'Dr. Sarah Wilson',
-      date: '2024-01-15',
+      counselor: 'Dr. Priya Sharma',
+      date: '2025-09-25',
       time: '2:00 PM',
       type: 'Individual Session',
       mode: 'In-person',
@@ -59,9 +60,9 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
     {
       id: '2',
       counselor: 'Group Session',
-      date: '2024-01-17',
+      date: '2025-09-27',
       time: '4:00 PM',
-      type: 'Anxiety Support Group',
+      type: 'Stress Management Group',
       mode: 'Virtual',
       status: 'confirmed'
     }
@@ -69,15 +70,15 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
 
   const handleBookAppointment = () => {
     // Handle appointment booking logic
-    alert('Appointment booked successfully! You will receive a confirmation email shortly.');
+    alert('Appointment booked successfully! You will receive a confirmation SMS and email shortly.');
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">Appointment Booking</h1>
-        <p className="text-gray-600">Schedule confidential counseling sessions with our mental health professionals</p>
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">Counseling Appointment Booking</h1>
+        <p className="text-gray-600">Schedule confidential counseling sessions with our qualified mental health professionals</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -276,10 +277,11 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <h4 className="font-semibold text-blue-800 mb-2">Important Information</h4>
             <ul className="text-sm text-blue-700 space-y-1">
-              <li>• All sessions are confidential</li>
+              <li>• All sessions are strictly confidential</li>
               <li>• Cancel at least 24 hours in advance</li>
-              <li>• Emergency support is available 24/7</li>
+              <li>• Emergency support available 24/7</li>
               <li>• First session is free for all students</li>
+              <li>• Sessions available in Hindi and English</li>
             </ul>
           </div>
 
@@ -289,9 +291,14 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
             <p className="text-sm text-red-700 mb-3">
               If you're having thoughts of self-harm or are in crisis, don't wait for an appointment.
             </p>
-            <button className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded transition-colors">
-              Crisis Hotline: 1-800-CRISIS
-            </button>
+            <div className="space-y-2">
+              <button className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded transition-colors text-sm">
+                Crisis Helpline: 9152987821
+              </button>
+              <button className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 rounded transition-colors text-sm">
+                Vandrevala Foundation: 9999666555
+              </button>
+            </div>
           </div>
         </div>
       </div>
