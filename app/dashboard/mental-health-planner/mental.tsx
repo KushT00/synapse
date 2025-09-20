@@ -6,8 +6,20 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { AlertTriangle, Brain, Heart, Activity, Loader2 } from 'lucide-react';
+import { 
+  AlertTriangle, 
+  Brain, 
+  Heart, 
+  Activity, 
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  Phone,
+  Stethoscope,
+  Users,
+  TrendingUp,
+  BookOpen
+} from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface ScoreData {
@@ -19,18 +31,37 @@ interface ScoreData {
 interface ScoreInterpretation {
   score: number;
   interpretation: string;
+  severity_level: string;
+  color: string;
+}
+
+interface RecommendationSection {
+  title: string;
+  content: string[];
+  priority: string;
+  icon: string;
 }
 
 interface AnalysisResult {
   success: boolean;
-  recommendation: string;
+  recommendation_sections: RecommendationSection[];
   scores: {
     phq9: ScoreInterpretation;
     gad7: ScoreInterpretation;
     phq12: ScoreInterpretation;
   };
+  overall_severity: string;
+  requires_immediate_attention: boolean;
+  crisis_resources?: string[];
   error?: string;
 }
+
+// Mock localStorage data for demonstration
+const mockStorageData = {
+  synapse_gad7: "1",
+  synapse_phq12: "24", 
+  synapse_phq9: "23"
+};
 
 export default function MentalHealthPlanner() {
   const [scores, setScores] = useState<ScoreData>({ phq9: 0, phq12: 0, gad7: 0 });
@@ -39,18 +70,54 @@ export default function MentalHealthPlanner() {
   const [isLoading, setIsLoading] = useState(false);
   const [scoresLoaded, setScoresLoaded] = useState(false);
 
+  // Icon mapping for recommendation sections
+  const getIcon = (iconName: string) => {
+    const iconMap = {
+      assessment: CheckCircle,
+      alert: AlertTriangle,
+      medical: Stethoscope,
+      heart: Heart,
+      lifestyle: Activity,
+      tracking: TrendingUp,
+      resources: BookOpen
+    };
+    return iconMap[iconName as keyof typeof iconMap] || CheckCircle;
+  };
+
+  // Priority color mapping
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'border-red-500 bg-red-50';
+      case 'medium': return 'border-yellow-500 bg-yellow-50';
+      case 'low': return 'border-blue-500 bg-blue-50';
+      default: return 'border-gray-500 bg-gray-50';
+    }
+  };
+
+  // Overall severity styling
+  const getSeverityStyle = (severity: string) => {
+    switch (severity) {
+      case 'critical': return 'bg-red-100 border-red-500 text-red-800';
+      case 'severe': return 'bg-orange-100 border-orange-500 text-orange-800';
+      case 'moderate': return 'bg-yellow-100 border-yellow-500 text-yellow-800';
+      case 'mild': return 'bg-blue-100 border-blue-500 text-blue-800';
+      case 'minimal': return 'bg-green-100 border-green-500 text-green-800';
+      default: return 'bg-gray-100 border-gray-500 text-gray-800';
+    }
+  };
+
   useEffect(() => {
-    // Load scores from localStorage
     const loadScores = () => {
       try {
-        const phq9 = parseInt(localStorage.getItem('synapse_phq9') || '0');
-        const phq12 = parseInt(localStorage.getItem('synapse_phq12') || '0');
-        const gad7 = parseInt(localStorage.getItem('synapse_gad7') || '0');
+        const phq9 = parseInt(mockStorageData.synapse_phq9);
+        const phq12 = parseInt(mockStorageData.synapse_phq12);
+        const gad7 = parseInt(mockStorageData.synapse_gad7);
         
         setScores({ phq9, phq12, gad7 });
         setScoresLoaded(true);
+        
       } catch (error) {
-        console.error('Error loading scores from localStorage:', error);
+        console.error('Error loading scores:', error);
         setScoresLoaded(true);
       }
     };
@@ -58,17 +125,10 @@ export default function MentalHealthPlanner() {
     loadScores();
   }, []);
 
-  const getSeverityBadgeColor = (interpretation: string): string => {
-    if (interpretation.includes('severe')) return 'destructive';
-    if (interpretation.includes('moderate')) return 'default';
-    if (interpretation.includes('mild')) return 'secondary';
-    return 'outline';
-  };
-
   const handleAnalyze = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/analyze-scores', {
+      const response = await fetch('http://localhost:8000/analyze-scores', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,57 +141,29 @@ export default function MentalHealthPlanner() {
         }),
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data: AnalysisResult = await response.json();
       setResult(data);
     } catch (error) {
       console.error('Error analyzing scores:', error);
       setResult({
         success: false,
-        error: 'Failed to analyze scores. Please try again.',
-        recommendation: '',
+        error: 'Failed to connect to the analysis service. Please ensure the backend server is running on http://localhost:8000',
+        recommendation_sections: [],
         scores: {
-          phq9: { score: 0, interpretation: '' },
-          gad7: { score: 0, interpretation: '' },
-          phq12: { score: 0, interpretation: '' }
-        }
+          phq9: { score: 0, interpretation: '', severity_level: 'unknown', color: 'outline' },
+          gad7: { score: 0, interpretation: '', severity_level: 'unknown', color: 'outline' },
+          phq12: { score: 0, interpretation: '', severity_level: 'unknown', color: 'outline' }
+        },
+        overall_severity: 'unknown',
+        requires_immediate_attention: false
       });
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const formatRecommendation = (text: string) => {
-    // Split by common section headers and format nicely
-    const sections = text.split(/(\*\*[^*]+\*\*)/g);
-    
-    return sections.map((section, index) => {
-      if (section.startsWith('**') && section.endsWith('**')) {
-        // This is a header
-        const headerText = section.replace(/\*\*/g, '');
-        return (
-          <h3 key={index} className="text-lg font-semibold mt-6 mb-3 text-primary">
-            {headerText}
-          </h3>
-        );
-      } else if (section.trim()) {
-        // This is content
-        return (
-          <div key={index} className="mb-4">
-            {section.split('\n').map((line, lineIndex) => {
-              if (line.trim()) {
-                return (
-                  <p key={lineIndex} className="mb-2 leading-relaxed">
-                    {line.trim()}
-                  </p>
-                );
-              }
-              return null;
-            })}
-          </div>
-        );
-      }
-      return null;
-    });
   };
 
   if (!scoresLoaded) {
@@ -156,6 +188,54 @@ export default function MentalHealthPlanner() {
           </p>
         </div>
 
+        {/* Overall Status Banner */}
+        {result && result.success && (
+          <Card className={`shadow-lg border-2 ${getSeverityStyle(result.overall_severity)}`}>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  {result.requires_immediate_attention ? 
+                    <AlertCircle className="w-6 h-6 mr-3" /> : 
+                    <CheckCircle className="w-6 h-6 mr-3" />
+                  }
+                  <div>
+                    <h3 className="text-xl font-semibold capitalize">
+                      Overall Status: {result.overall_severity}
+                    </h3>
+                    {result.requires_immediate_attention && (
+                      <p className="text-sm font-medium mt-1">
+                        Immediate professional attention recommended
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Crisis Resources Alert */}
+        {result && result.crisis_resources && (
+          <Card className="border-2 border-red-500 bg-red-50 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center text-red-800">
+                <Phone className="w-6 h-6 mr-2" />
+                Crisis Resources - Available 24/7
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {result.crisis_resources.map((resource, index) => (
+                  <div key={index} className="flex items-center p-3 bg-white rounded border border-red-200">
+                    <AlertCircle className="w-4 h-4 mr-2 text-red-500 flex-shrink-0" />
+                    <span className="font-medium text-red-800">{resource}</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Current Scores Display */}
         <Card className="border-2 border-blue-200 shadow-lg">
           <CardHeader>
@@ -164,45 +244,45 @@ export default function MentalHealthPlanner() {
               Your Current Assessment Scores
             </CardTitle>
             <CardDescription>
-              Loaded from your local storage
+              Loaded from stored assessment data
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
+              <div className="text-center p-4 bg-blue-50 rounded-lg border-l-4 border-red-500">
                 <div className="flex items-center justify-center mb-2">
                   <Heart className="w-6 h-6 text-red-500 mr-2" />
                   <h3 className="font-semibold">PHQ-9 (Depression)</h3>
                 </div>
                 <div className="text-3xl font-bold text-blue-600 mb-2">{scores.phq9}/27</div>
-                {result && (
-                  <Badge variant={getSeverityBadgeColor(result.scores.phq9.interpretation) as any}>
+                {result && result.success && (
+                  <Badge variant={result.scores.phq9.color as any}>
                     {result.scores.phq9.interpretation}
                   </Badge>
                 )}
               </div>
               
-              <div className="text-center p-4 bg-green-50 rounded-lg">
+              <div className="text-center p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
                 <div className="flex items-center justify-center mb-2">
                   <AlertTriangle className="w-6 h-6 text-yellow-500 mr-2" />
                   <h3 className="font-semibold">GAD-7 (Anxiety)</h3>
                 </div>
                 <div className="text-3xl font-bold text-green-600 mb-2">{scores.gad7}/21</div>
-                {result && (
-                  <Badge variant={getSeverityBadgeColor(result.scores.gad7.interpretation) as any}>
+                {result && result.success && (
+                  <Badge variant={result.scores.gad7.color as any}>
                     {result.scores.gad7.interpretation}
                   </Badge>
                 )}
               </div>
               
-              <div className="text-center p-4 bg-purple-50 rounded-lg">
+              <div className="text-center p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
                 <div className="flex items-center justify-center mb-2">
                   <Activity className="w-6 h-6 text-purple-500 mr-2" />
                   <h3 className="font-semibold">PHQ-12 (Somatic)</h3>
                 </div>
                 <div className="text-3xl font-bold text-purple-600 mb-2">{scores.phq12}/24</div>
-                {result && (
-                  <Badge variant={getSeverityBadgeColor(result.scores.phq12.interpretation) as any}>
+                {result && result.success && (
+                  <Badge variant={result.scores.phq12.color as any}>
                     {result.scores.phq12.interpretation}
                   </Badge>
                 )}
@@ -240,40 +320,100 @@ export default function MentalHealthPlanner() {
                 {isLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Analyzing Your Scores...
+                    Getting AI Analysis...
                   </>
                 ) : (
-                  'Get My Personalized Plan'
+                  'Get AI-Powered Personalized Plan'
                 )}
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Results Section */}
+        {/* Structured Results Section */}
         {result && (
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-2xl">Your Personalized Mental Health Plan</CardTitle>
-              <CardDescription>
-                Based on your assessment scores and additional information
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {result.success ? (
-                <div className="prose max-w-none">
-                  {formatRecommendation(result.recommendation)}
+          <div className="space-y-6">
+            {result.success ? (
+              <>
+                <Card className="shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="text-2xl">Your Personalized Mental Health Plan</CardTitle>
+                    <CardDescription>
+                      Based on your assessment scores and additional information
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+
+                {/* Recommendation Sections */}
+                <div className="grid gap-6">
+                  {result.recommendation_sections.map((section, index) => {
+                    const IconComponent = getIcon(section.icon);
+                    return (
+                      <Card 
+                        key={index} 
+                        className={`shadow-lg border-l-4 ${getPriorityColor(section.priority)}`}
+                      >
+                        <CardHeader>
+                          <CardTitle className="flex items-center text-lg">
+                            <IconComponent className="w-6 h-6 mr-3" />
+                            {section.title}
+                            <Badge 
+                              variant={section.priority === 'high' ? 'destructive' : 
+                                     section.priority === 'medium' ? 'default' : 'secondary'} 
+                              className="ml-2"
+                            >
+                              {section.priority} priority
+                            </Badge>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-3">
+                            {section.content.map((item, itemIndex) => (
+                              <div 
+                                key={itemIndex} 
+                                className="flex items-start p-3 bg-white rounded border border-gray-200"
+                              >
+                                <CheckCircle className="w-4 h-4 mr-3 mt-0.5 text-green-500 flex-shrink-0" />
+                                <p className="text-gray-700 leading-relaxed">{item}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
                 </div>
-              ) : (
-                <Alert variant="destructive">
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertDescription>
-                    {result.error || 'An error occurred while generating recommendations.'}
-                  </AlertDescription>
-                </Alert>
-              )}
-            </CardContent>
-          </Card>
+
+                {/* Summary Card */}
+                <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-lg">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center mb-4">
+                      <Users className="w-6 h-6 mr-3 text-blue-600" />
+                      <h3 className="text-xl font-semibold text-blue-800">
+                        Remember: You're Not Alone
+                      </h3>
+                    </div>
+                    <p className="text-blue-700 leading-relaxed">
+                      Mental health is a journey, and seeking help is a sign of strength. 
+                      These recommendations are personalized for your current situation. 
+                      Consider sharing this plan with a trusted friend, family member, or healthcare provider.
+                    </p>
+                  </CardContent>
+                </Card>
+              </>
+            ) : (
+              <Card className="shadow-lg">
+                <CardContent className="pt-6">
+                  <Alert variant="destructive">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertDescription>
+                      {result.error || 'An error occurred while generating recommendations.'}
+                    </AlertDescription>
+                  </Alert>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         )}
 
         {/* Disclaimer */}
