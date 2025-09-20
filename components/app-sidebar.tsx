@@ -57,6 +57,8 @@ const data = {
         { title: "🏆 Rewards", url: "/dashboard/reward" },
         { title: "🧘 Meditation Hall", url: "/dashboard/panchayat" },
         { title: "📑 Resource", url: "/dashboard/resource" },
+        { title: "📝 planner", url: "/dashboard/planner" },
+
 
 
         { title: "😺 My Corner", url: "profile" },
