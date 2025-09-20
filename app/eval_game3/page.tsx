@@ -79,7 +79,7 @@ export default function GAD7Onboarding() {
               </div>
               <div className="flex gap-3">
                 <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => setSubmitted(false)}>Edit answers</Button>
-                <a href="/dashboard" className="inline-flex">
+                <a href="/dashboard/voice" className="inline-flex">
                   <Button className="bg-sky-600 hover:bg-sky-700 text-white">Continue</Button>
                 </a>
               </div>
