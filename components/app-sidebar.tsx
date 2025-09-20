@@ -56,6 +56,8 @@ const data = {
         { title: "🧩 Fun World", url: "/dashboard/games" },
         { title: "🏆 Rewards", url: "/dashboard/reward" },
         { title: "🧘 Meditation Hall", url: "/dashboard/panchayat" },
+        { title: "📑 Resource", url: "/dashboard/resource" },
+
 
         { title: "😺 My Corner", url: "profile" },
         // { title: "Files", url: "files" },
@@ -80,6 +82,8 @@ const data = {
         { title: "Monitor EEG", url: "/dashboard/theraphist" },
         
         { title: "MentorShip", url: "/dashboard/panchayat" },
+        { title: "Appoint", url: "/dashboard/appoinments" },
+
         // { title: "Changelog", url: "#" },
       ],
     },

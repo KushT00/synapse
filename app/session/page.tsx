@@ -192,6 +192,7 @@ function ModernCTAPage() {
                             <Button
                                 size="lg"
                                 className="relative bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white border-0 px-8 py-6 text-lg font-semibold rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                                onClick={() => window.location.href = "/dashboard/voice"}
                             >
                                 <Calendar className="mr-3 h-5 w-5" />
                                 Start Session
@@ -204,6 +205,7 @@ function ModernCTAPage() {
                                 size="lg"
                                 variant="outline"
                                 className="relative bg-transparent border-2 border-white/20 hover:border-white/40 text-white hover:bg-white/5 px-8 py-6 text-lg font-semibold rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                                onClick={() => window.location.href = "/appoinment"}
                             >
                                 <Users className="mr-3 h-5 w-5" />
                                 Start Coaching
