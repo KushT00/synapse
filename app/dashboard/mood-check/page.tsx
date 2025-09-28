@@ -1,5 +1,4 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import Conversation from "@/components/convo"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,7 +13,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import MentalHealthDashboard from "./parent"
+import MoodCheck from "./mood-check"
 
 export default function Page() {
   return (
@@ -34,19 +33,17 @@ export default function Page() {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Warmup</BreadcrumbPage>
+                  <BreadcrumbPage>Mood Check</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-      
-        
-        < MentalHealthDashboard/>
-        
+          <MoodCheck/>
         </div>
       </SidebarInset>
     </SidebarProvider>
   )
 }
+
