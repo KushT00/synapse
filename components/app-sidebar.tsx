@@ -61,22 +61,11 @@ const data = {
         { title: "📝 planner", url: "/dashboard/planner" },
 
 
-
-        { title: "😺 My Corner", url: "profile" },
         // { title: "Files", url: "files" },
         // { title: "Feedback", url: "feedback" },
       ],
     },
-    {
-      title: "Parent",
-      url: "",
-      icon: User,
-      items: [
-        { title: "Monitor", url: "/dashboard/parent" },
-        
-        
-      ],
-    },
+    
     {
       title: "Therapist",
       url: "#",
