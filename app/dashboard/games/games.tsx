@@ -303,6 +303,15 @@ export default function Home() {
             color: "bg-gradient-to-br from-yellow-400 to-orange-500",
             rocketPart: "rightFin",
             cartoonImage: "https://media.istockphoto.com/id/884362232/vector/set-of-different-kids-with-various-postures.jpg?s=612x612&w=0&k=20&c=fTsdwy_U3xq0Ca_3s-5Oqrh7-ij7rBCgMCoNCRpcXrg="
+        },
+        {
+            id: "mood-check",
+            title: "Mood Check",
+            description: "Check how you're feeling and boost your mood!",
+            icon: "😊",
+            color: "bg-gradient-to-br from-purple-400 to-pink-500",
+            rocketPart: "window",
+            cartoonImage: "https://media.istockphoto.com/id/1208760136/vector/cartoon-brain-lifting-dumbbells-vector.jpg?s=612x612&w=0&k=20&c=YVtvWFP4F38m7s9KSYwrUsAzKoHdT3jNrC54VU6HqBc="
         }
     ];
 
@@ -320,6 +329,8 @@ export default function Home() {
             router.push("games/problem-solving");
         } else if (moduleId === "behavior") {
             router.push("games/behavior");
+        } else if (moduleId === "mood-check") {
+            router.push("/dashboard/mood-check");
         }
     };
 
@@ -330,7 +341,7 @@ export default function Home() {
             setCompletedModules(newCompletedModules);
 
             // If all modules completed, show success message
-            if (newCompletedModules.length === 4) {
+            if (newCompletedModules.length === 5) {
                 // Don't auto-launch, let user click the launch button
             }
         }
@@ -349,7 +360,7 @@ export default function Home() {
         }
     };
 
-    const isAllCompleted = completedModules.length === 4;
+    const isAllCompleted = completedModules.length === 5;
 
     // Handle rocket animation only
     React.useEffect(() => {
@@ -424,7 +435,7 @@ export default function Home() {
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.3 }}
                         >
-                            Complete all 4 fun activities to build your rocket and launch it to space!
+                            Complete all 5 fun activities to build your rocket and launch it to space!
                         </motion.p>
 
                         <motion.div
@@ -435,7 +446,7 @@ export default function Home() {
                         >
                             <div className="bg-gradient-to-r from-pink-400 to-purple-400 px-6 py-3 rounded-full shadow-lg">
                                 <span className="text-white font-bold text-lg">
-                                    Progress: {completedModules.length}/4
+                                    Progress: {completedModules.length}/5
                                 </span>
                             </div>
                             {isAllCompleted && (
@@ -573,7 +584,7 @@ export default function Home() {
                                 <RocketPart type="rightFin" visible={completedModules.includes("behavior")} />
 
                                 {/* Window */}
-                                {completedModules.includes("memory") && (
+                                {completedModules.includes("mood-check") && (
                                     <motion.circle
                                         cx="60"
                                         cy="40"
@@ -614,7 +625,7 @@ export default function Home() {
                     </div>
                     <div className="text-center mt-6">
                         <p className="text-lg text-gray-600 font-semibold">
-                            {completedModules.length}/4 activities completed
+                            {completedModules.length}/5 activities completed
                         </p>
                         {isAllCompleted && !isRocketFlying && (
                             <motion.p
