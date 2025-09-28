@@ -53,7 +53,7 @@ import {
     Headphones,
     Play,
     Pause,
-    Stop,
+    Square,
     Volume2,
     Mic,
     Camera,
