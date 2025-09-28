@@ -1,9 +1,9 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Play, Pause, Volume2, Download, SkipBack, SkipForward } from 'lucide-react'
 
-export default function ListenPage() {
+function ListenContent() {
   const params = useSearchParams()
   const src = params.get('src') || ''
   const title = params.get('title') || 'Audio'
@@ -210,5 +210,28 @@ export default function ListenPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ListenPage() {
+  return (
+    <Suspense fallback={<div className="min-h-[calc(100vh-4rem)] w-full flex items-center justify-center p-4">
+      <div className="w-full max-w-2xl">
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded mb-6"></div>
+            <div className="h-32 bg-gray-200 rounded-full mb-8 mx-auto w-32"></div>
+            <div className="h-2 bg-gray-200 rounded mb-4"></div>
+            <div className="flex justify-center space-x-4">
+              <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
+              <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
+              <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>}>
+      <ListenContent />
+    </Suspense>
   )
 }

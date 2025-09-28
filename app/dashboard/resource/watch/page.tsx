@@ -1,8 +1,8 @@
 "use client"
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-export default function WatchPage() {
+function WatchContent() {
   const params = useSearchParams()
   const src = params.get('src') || ''
   const title = params.get('title') || 'Video'
@@ -49,4 +49,17 @@ export default function WatchPage() {
   )
 }
 
-
+export default function WatchPage() {
+  return (
+    <Suspense fallback={<div className="min-h-[calc(100vh-4rem)] w-full flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl">
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 rounded mb-3"></div>
+          <div className="bg-gray-200 rounded-lg aspect-video"></div>
+        </div>
+      </div>
+    </div>}>
+      <WatchContent />
+    </Suspense>
+  )
+}
