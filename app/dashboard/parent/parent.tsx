@@ -53,7 +53,7 @@ import {
     Headphones,
     Play,
     Pause,
-    Stop,
+    Square,
     Volume2,
     Mic,
     Camera,
@@ -184,22 +184,22 @@ const MentalHealthDashboard = () => {
     ];
 
     const mentalHealthAreas = [
-        { name: 'Stress Management', score: 82, level: childData.stressLevel, icon: Shield, color: 'from-orange-400 to-red-500', bgColor: 'bg-orange-50', textColor: 'text-orange-600' },
-        { name: 'Anxiety Control', score: 75, level: childData.anxietyLevel, icon: Heart, color: 'from-blue-400 to-indigo-500', bgColor: 'bg-blue-50', textColor: 'text-blue-600' },
+        { name: 'Cognitive', score: 82, level: childData.stressLevel, icon: Shield, color: 'from-orange-400 to-red-500', bgColor: 'bg-orange-50', textColor: 'text-orange-600' },
+        { name: 'Cognitive', score: 75, level: childData.anxietyLevel, icon: Heart, color: 'from-blue-400 to-indigo-500', bgColor: 'bg-blue-50', textColor: 'text-blue-600' },
         { name: 'Mood Stability', score: 88, level: childData.depressionLevel, icon: Smile, color: 'from-green-400 to-emerald-500', bgColor: 'bg-green-50', textColor: 'text-green-600' },
         { name: 'Coping Skills', score: 71, level: 3, icon: Brain, color: 'from-purple-400 to-violet-500', bgColor: 'bg-purple-50', textColor: 'text-purple-600' }
     ];
 
     const recentAchievements = [
-        { title: 'Stress Buster', description: 'Used breathing techniques during high stress', icon: Shield, date: 'Today' },
+        { title: 'Cognitive Buster', description: 'Used breathing techniques effectively', icon: Shield, date: 'Today' },
         { title: 'Mood Booster', description: 'Completed 3 positive activities today', icon: Sun, date: 'Yesterday' },
-        { title: 'Anxiety Warrior', description: 'Managed anxiety episode successfully', icon: Heart, date: '2 days ago' }
+        { title: 'Cognitive Warrior', description: 'Managed episode successfully', icon: Heart, date: '2 days ago' }
     ];
 
     const weeklyGoals = [
         { title: 'Daily mood check-ins', completed: 5, total: 7, color: 'bg-emerald-500' },
         { title: 'Practice relaxation techniques', completed: 4, total: 5, color: 'bg-blue-500' },
-        { title: 'Complete stress management exercises', completed: 3, total: 4, color: 'bg-purple-500' }
+        { title: 'Complete cognitive exercises', completed: 3, total: 4, color: 'bg-purple-500' }
     ];
 
     // Generate unique UUID for therapist link
@@ -347,11 +347,11 @@ const MentalHealthDashboard = () => {
                             <div className="grid grid-cols-3 gap-4 mb-6">
                                 <div className="text-center p-4 bg-orange-50 rounded-2xl border border-orange-100">
                                     <div className="text-2xl font-bold text-orange-600">{childData.stressLevel}/5</div>
-                                    <div className="text-sm text-orange-600">Stress Level</div>
+                                    <div className="text-sm text-orange-600">Cognitive Level</div>
                                 </div>
                                 <div className="text-center p-4 bg-blue-50 rounded-2xl border border-blue-100">
                                     <div className="text-2xl font-bold text-blue-600">{childData.anxietyLevel}/5</div>
-                                    <div className="text-sm text-blue-600">Anxiety Level</div>
+                                    <div className="text-sm text-blue-600">Cognitive Level</div>
                                 </div>
                                 <div className="text-center p-4 bg-green-50 rounded-2xl border border-green-100">
                                     <div className="text-2xl font-bold text-green-600">{childData.depressionLevel}/5</div>
@@ -519,7 +519,7 @@ const MentalHealthDashboard = () => {
                                 <h3 className="text-lg font-bold">Daily Wellness Tip</h3>
                             </div>
                             <p className="text-sm leading-relaxed">
-                                "Deep breathing exercises for just 5 minutes can help reduce stress and anxiety levels significantly."
+                                "Deep breathing exercises for just 5 minutes can help improve cognitive state significantly."
                             </p>
                         </div>
 

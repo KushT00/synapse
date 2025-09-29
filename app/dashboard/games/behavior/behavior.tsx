@@ -67,28 +67,28 @@ export default function BehaviorGame() {
   const currentTaskData = tasks[currentTask];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-orange-100 to-red-100">
+    <div className="min-h-screen bg-[#1a1b3e] text-white">
       {/* Header */}
-      <div className="bg-white/90 backdrop-blur-sm shadow-lg border-b-4 border-yellow-200">
+      <div className="border-b border-[#2d3748] bg-[#1f2046]">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <motion.button
               onClick={handleBackToHome}
-              className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-4 py-2 rounded-full font-bold shadow-lg"
+              className="flex items-center space-x-2 bg-[#3b82f6] text-white px-4 py-2 rounded-md font-medium"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <ArrowLeft size={20} />
-              <span>Back to Home</span>
+              <span>Back</span>
             </motion.button>
             
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-gray-800">⭐ Super Habits</h1>
-              <p className="text-gray-600">Build amazing habits like a champion!</p>
+              <h1 className="text-2xl font-semibold text-white">Habits</h1>
+              <p className="text-slate-300 text-sm">Consistency and routine tracking</p>
             </div>
 
-            <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-4 py-2 rounded-full font-bold">
-              Score: {score}/{tasks.length}
+            <div className="text-white/90 px-4 py-2 rounded-md font-medium bg-[#2d3748]">
+              Score {score}/{tasks.length}
             </div>
           </div>
         </div>
@@ -100,20 +100,20 @@ export default function BehaviorGame() {
           {!gameCompleted ? (
             <motion.div
               key="task"
-              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border-4 border-yellow-200"
+              className="rounded-xl p-8 border border-[#2d3748] bg-[#1f2046]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
               {/* Progress Bar */}
               <div className="mb-8">
-                <div className="flex justify-between text-sm text-gray-600 mb-2">
+                <div className="flex justify-between text-xs text-slate-300 mb-2">
                   <span>Question {currentTask + 1} of {tasks.length}</span>
                   <span>{Math.round(((currentTask + 1) / tasks.length) * 100)}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
+                <div className="w-full bg-[#2d3748] rounded-full h-2">
                   <motion.div
-                    className="bg-gradient-to-r from-yellow-400 to-orange-400 h-3 rounded-full"
+                    className="bg-[#10b981] h-2 rounded-full"
                     initial={{ width: 0 }}
                     animate={{ width: `${((currentTask + 1) / tasks.length) * 100}%` }}
                     transition={{ duration: 0.5 }}
@@ -129,8 +129,7 @@ export default function BehaviorGame() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="text-6xl mb-4">⭐</div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                <h2 className="text-xl font-semibold text-white mb-6">
                   {currentTaskData.question}
                 </h2>
               </motion.div>
@@ -141,7 +140,7 @@ export default function BehaviorGame() {
                   <motion.button
                     key={index}
                     onClick={() => handleAnswer(option)}
-                    className="bg-gradient-to-r from-yellow-100 to-orange-100 hover:from-yellow-200 hover:to-orange-200 border-4 border-yellow-300 rounded-2xl p-6 text-lg font-bold text-gray-800 shadow-lg transition-all duration-200"
+                    className="rounded-md p-5 text-sm font-medium text-white transition-all duration-200 border border-[#2d3748] bg-[#2d3748] hover:border-[#3b82f6]"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                     initial={{ opacity: 0, y: 20 }}
@@ -156,16 +155,15 @@ export default function BehaviorGame() {
           ) : (
             <motion.div
               key="results"
-              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border-4 border-yellow-200 text-center"
+              className="rounded-xl p-8 border border-[#2d3748] bg-[#1f2046] text-center"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
             >
-              <div className="text-8xl mb-6">🏆</div>
-              <h2 className="text-4xl font-bold text-gray-800 mb-4">
-                Habits Complete!
+              <h2 className="text-2xl font-semibold text-white mb-2">
+                Session complete
               </h2>
-              <p className="text-xl text-gray-600 mb-6">
-                You scored {score} out of {tasks.length}!
+              <p className="text-sm text-slate-300 mb-6">
+                Score {score} / {tasks.length}
               </p>
               
               {score >= 3 ? (
@@ -174,10 +172,9 @@ export default function BehaviorGame() {
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.5 }}
                 >
-                  <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white p-6 rounded-2xl mb-6">
-                    <div className="text-4xl mb-2">🌟</div>
-                    <h3 className="text-2xl font-bold mb-2">Super Habits Built!</h3>
-                    <p>You're becoming a champion!</p>
+                  <div className="text-white p-6 rounded-md mb-6 border border-[#2d3748] bg-[#1a1b3e]">
+                    <h3 className="text-lg font-medium mb-1">Well done</h3>
+                    <p className="text-sm text-slate-300">Keep the consistency going.</p>
                   </div>
                   
                   <motion.button
@@ -191,18 +188,17 @@ export default function BehaviorGame() {
                       }
                       router.push("/");
                     }}
-                    className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold py-4 px-8 rounded-full text-xl shadow-2xl"
+                    className="bg-[#10b981] text-white font-medium py-3 px-6 rounded-md"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    Complete Module! 🚀
+                    Complete module
                   </motion.button>
                 </motion.div>
               ) : (
-                <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white p-6 rounded-2xl mb-6">
-                  <div className="text-4xl mb-2">💪</div>
-                  <h3 className="text-2xl font-bold mb-2">Good Start!</h3>
-                  <p>Keep building those super habits!</p>
+                <div className="text-white p-6 rounded-md mb-6 border border-[#2d3748] bg-[#1a1b3e]">
+                  <h3 className="text-lg font-medium mb-1">Good start</h3>
+                  <p className="text-sm text-slate-300">Keep building the routine.</p>
                 </div>
               )}
             </motion.div>

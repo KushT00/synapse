@@ -26,25 +26,25 @@ const ResourceHub: React.FC<ResourceHubProps> = ({ userRole }) => {
   const resources: Resource[] = [
     {
       id: '1',
-      title: 'Understanding Anxiety: A Student Guide',
+      title: 'Understanding Cognitive: A Student Guide',
       type: 'video',
-      category: 'anxiety',
+      category: 'cognitive-tech',
       language: 'English',
       duration: 15,
       url: '#',
-      description: 'Learn about anxiety symptoms, causes, and management techniques specifically for college students.',
-      tags: ['anxiety', 'coping', 'students', 'mental health']
+      description: 'Learn about cognitive signals, causes, and management techniques tailored for college students.',
+      tags: ['cognitive', 'coping', 'students', 'mental health']
     },
     {
       id: '2',
       title: 'Progressive Muscle Relaxation',
       type: 'audio',
-      category: 'stress',
+      category: 'cognitive-tech',
       language: 'English',
       duration: 20,
       url: '#',
       description: 'Guided audio session to help you relax and reduce physical tension.',
-      tags: ['relaxation', 'stress relief', 'meditation']
+      tags: ['relaxation', 'cognitive relief', 'meditation']
     },
     {
       id: '3',
@@ -79,24 +79,24 @@ const ResourceHub: React.FC<ResourceHubProps> = ({ userRole }) => {
     },
     {
       id: '6',
-      title: 'Exam Stress Management',
+      title: 'Exam Cognitive Management',
       type: 'article',
       category: 'academic',
       language: 'Tamil',
       url: '#',
       description: 'Strategies to manage academic pressure and perform better during exams.',
-      tags: ['academic stress', 'exams', 'performance']
+      tags: ['academic cognitive', 'exams', 'performance']
     }
   ];
 
   const categories = [
     { id: 'all', label: 'All Categories' },
-    { id: 'anxiety', label: 'Anxiety' },
+    { id: 'cognitive-tech', label: 'Cognitive' },
     { id: 'depression', label: 'Depression' },
-    { id: 'stress', label: 'Stress Management' },
+    { id: 'cognitive-tech', label: 'Cognitive Management' },
     { id: 'sleep', label: 'Sleep & Wellness' },
     { id: 'relationships', label: 'Relationships' },
-    { id: 'academic', label: 'Academic Stress' }
+    { id: 'academic', label: 'Academic Cognitive' }
   ];
 
   const types = [

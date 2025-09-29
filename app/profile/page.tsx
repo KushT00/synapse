@@ -148,11 +148,11 @@ const Screen3ChildInfo = ({ childInfo, setChildInfo }: { childInfo: ChildInfo; s
 
 const Screen4Challenges = ({ preferences, setPreferences }: { preferences: UserPreferences; setPreferences: (prefs: UserPreferences) => void }) => {
   const challenges = [
-    { id: 'anxiety', label: 'Anxiety / Worry', icon: '😟' },
+    { id: 'anxiety', label: 'Cognitive', icon: '😟' },
     { id: 'low-mood', label: 'Low Mood', icon: '😔' },
     { id: 'sleep', label: 'Sleep Issues', icon: '😴' },
     { id: 'burnout', label: 'Burnout / Exhaustion', icon: '🥱' },
-    { id: 'academic-stress', label: 'Academic Stress', icon: '📚' },
+    { id: 'academic-stress', label: 'Academic Cognitive', icon: '📚' },
     { id: 'social-isolation', label: 'Social Isolation', icon: '🧍' },
     { id: 'not-sure', label: 'Not Sure', icon: '❓' },
   ];
@@ -207,10 +207,10 @@ const Screen4Challenges = ({ preferences, setPreferences }: { preferences: UserP
 
 const Screen5Goals = ({ preferences, setPreferences }: { preferences: UserPreferences; setPreferences: (prefs: UserPreferences) => void }) => {
   const goals = [
-    { id: 'reduce-anxiety', label: 'Reduce Anxiety', icon: '🫶' },
+    { id: 'reduce-anxiety', label: 'Cognitive Reduction', icon: '🫶' },
     { id: 'improve-mood', label: 'Improve Mood', icon: '🌤️' },
     { id: 'better-sleep', label: 'Sleep Better', icon: '🛌' },
-    { id: 'manage-stress', label: 'Manage Stress', icon: '🧘' },
+    { id: 'manage-stress', label: 'Manage Cognitive', icon: '🧘' },
     { id: 'build-support', label: 'Build Support Network', icon: '🤝' },
     { id: 'academic-balance', label: 'Balance Academics & Wellbeing', icon: '📘' },
   ];

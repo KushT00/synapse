@@ -13,7 +13,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import MoodCheck from "./mood-check"
+import CognitiveHealth from "./cognitive-health"
 
 export default function Page() {
   return (
@@ -33,17 +33,18 @@ export default function Page() {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Mood Check</BreadcrumbPage>
+                  <BreadcrumbPage>Cognitive Health</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <MoodCheck/>
+          <CognitiveHealth/>
         </div>
       </SidebarInset>
     </SidebarProvider>
   )
 }
+
 

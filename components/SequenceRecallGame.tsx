@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Play, RotateCcw, CheckCircle, XCircle, Star, Lightbulb, Camera, Video, StopCircle } from "lucide-react";
+import { RotateCcw, XCircle, Lightbulb, Camera, Video, StopCircle } from "lucide-react";
 
 interface GameResult {
   gameId: string;
@@ -19,42 +19,7 @@ interface GameProps {
   onComplete: (result: GameResult) => void;
 }
 
-// Voice feedback phrases
-const correctVoices = [
-  "Awesome! You got it right!",
-  "Super memory! Let’s go to the next level!",
-  "Wow, you’re a memory master!",
-  "Great job! You remembered everything!",
-  "Yay! That was perfect!"
-];
-const wrongVoices = [
-  "Oops! That wasn’t quite right. Try again!",
-  "Oh no! That’s okay, you’ll get it next time!",
-  "Almost! Don’t worry, you can do it!",
-  "Hmm, not quite. Give it another shot!",
-  "Keep trying! You’re getting better!"
-];
-const hintVoices = [
-  (color: string) => `Here’s a hint: The first color is ${color}.`,
-  (color: string) => `Let me help you! The sequence starts with ${color}.`,
-  (color: string) => `Psst! The first color is ${color}. You can do it!`,
-  (color: string) => `Remember, the first color is ${color}.`,
-  (color: string) => `Your memory buddy says: Start with ${color}!`
-];
-
-function speak(text: string) {
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    const utter = new window.SpeechSynthesisUtterance(text);
-    utter.rate = 1.15;
-    utter.pitch = 1.4;
-    // Try to use a child-friendly voice if available
-    const voices = window.speechSynthesis.getVoices();
-    const childVoice = voices.find(v => v.name.toLowerCase().includes('child') || v.name.toLowerCase().includes('kid'));
-    if (childVoice) utter.voice = childVoice;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utter);
-  }
-}
+// Remove playful speech synthesis and kid-like phrases for a professional tone
 
 export default function SequenceRecallGame({ onComplete }: GameProps) {
   const [sequence, setSequence] = useState<number[]>([]);
@@ -79,14 +44,14 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  // Soft, solid colors for kids
+  // Neutral, high-contrast tiles
   const colors = [
-    { bg: 'bg-red-300', name: 'Red' },
-    { bg: 'bg-blue-300', name: 'Blue' },
-    { bg: 'bg-green-300', name: 'Green' },
-    { bg: 'bg-yellow-200', name: 'Yellow' },
-    { bg: 'bg-purple-300', name: 'Purple' },
-    { bg: 'bg-pink-200', name: 'Pink' }
+    { bg: 'bg-slate-500', name: 'Slate' },
+    { bg: 'bg-sky-500', name: 'Sky' },
+    { bg: 'bg-emerald-500', name: 'Emerald' },
+    { bg: 'bg-amber-500', name: 'Amber' },
+    { bg: 'bg-violet-500', name: 'Violet' },
+    { bg: 'bg-rose-500', name: 'Rose' }
   ];
 
   useEffect(() => {
@@ -348,7 +313,7 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
     setIsShowing(false);
     setCurrentShowingIndex(-1);
     setGameState('input');
-    speak('Now it’s your turn! Tap the colors in the same order.');
+    // Professional tone: no voice prompt
   };
 
   const handleTileClick = (index: number) => {
@@ -362,19 +327,16 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
       const duration = (Date.now() - startTime) / 1000;
       
       if (isCorrect) {
-        setShowCelebration(true);
-        speak(correctVoices[Math.floor(Math.random() * correctVoices.length)]);
-        setTimeout(() => setShowCelebration(false), 2000);
+        // Minimal feedback only
         setScore(score + 10);
         setLevel(level + 1);
         setUserSequence([]);
         setGameState('waiting');
       } else {
         // Game over - stop recording and save to backend
-        console.log('🎮 Game over - stopping recording...');
+        console.log('Game over - stopping recording...');
         stopRecording();
         setGameOver(true);
-        speak(wrongVoices[Math.floor(Math.random() * wrongVoices.length)]);
         
         // Calculate points based on performance
         const pointsEarned = calculatePoints(score, level, duration);
@@ -454,8 +416,6 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
     if (gameOver) return;
     setShowHint(true);
     const colorName = colors[sequence[0]].name;
-    const phrase = hintVoices[Math.floor(Math.random() * hintVoices.length)](colorName);
-    speak(phrase);
     setTimeout(() => setShowHint(false), 3000);
   };
 
@@ -580,7 +540,7 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
   };
 
   return (
-    <div className="text-center bg-white min-h-screen p-6">
+    <div className="text-center min-h-screen p-6 bg-[#1a1b3e] text-white">
       {/* Celebration Animation */}
       {showCelebration && (
         <motion.div
@@ -624,33 +584,29 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
         >
-          <h3 className="text-4xl font-bold text-gray-800 mb-2 flex items-center justify-center">
-            <Star className="w-8 h-8 text-yellow-400 mr-2" />
-            Color Memory Game
-            <Star className="w-8 h-8 text-yellow-400 ml-2" />
-          </h3>
-          <p className="text-xl text-gray-600 mb-4">Remember the colors and repeat them!</p>
+          <h3 className="text-3xl font-semibold text-white mb-2 flex items-center justify-center">Sequence Recall</h3>
+          <p className="text-base text-slate-300 mb-4">Watch the sequence. Repeat in the same order.</p>
           {/* Progress Bar */}
-          <div className="bg-gray-200 rounded-full h-4 mb-4 overflow-hidden shadow-inner">
+          <div className="bg-[#2d3748] rounded-full h-2 mb-4 overflow-hidden">
             <motion.div
-              className="bg-green-400 h-full rounded-full"
+              className="bg-[#3b82f6] h-full rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${(score / 100) * 100}%` }}
               transition={{ duration: 0.5 }}
             />
           </div>
-          <div className="flex justify-center space-x-8 text-lg">
-            <div className="bg-white px-4 py-2 rounded-2xl shadow-lg border border-gray-200">
-              <span className="text-blue-600 font-bold">Level: </span>
-              <span className="text-2xl font-bold text-purple-600">{level}</span>
+          <div className="flex justify-center space-x-4 text-sm">
+            <div className="bg-[#1f2046] border border-[#2d3748] px-4 py-2 rounded-md">
+              <span className="text-slate-300">Level: </span>
+              <span className="text-white font-semibold">{level}</span>
             </div>
-            <div className="bg-white px-4 py-2 rounded-2xl shadow-lg border border-gray-200">
-              <span className="text-green-600 font-bold">Score: </span>
-              <span className="text-2xl font-bold text-green-600">{score}</span>
+            <div className="bg-[#1f2046] border border-[#2d3748] px-4 py-2 rounded-md">
+              <span className="text-slate-300">Score: </span>
+              <span className="text-white font-semibold">{score}</span>
             </div>
-            <div className="bg-white px-4 py-2 rounded-2xl shadow-lg border border-yellow-300">
-              <span className="text-yellow-600 font-bold">Points: </span>
-              <span className="text-2xl font-bold text-yellow-600">{parseInt(localStorage.getItem('sequenceRecallPoints') || '0')}</span>
+            <div className="bg-[#1f2046] border border-[#2d3748] px-4 py-2 rounded-md">
+              <span className="text-slate-300">Points: </span>
+              <span className="text-white font-semibold">{parseInt(localStorage.getItem('sequenceRecallPoints') || '0')}</span>
             </div>
           </div>
         </motion.div>
@@ -665,29 +621,21 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
           {colors.slice(0, 6).map((color, index) => (
             <motion.button
               key={index}
-              className={`w-20 h-20 rounded-3xl ${color.bg} shadow-xl border-4 border-white ${
+              className={`w-24 h-24 rounded-lg ${color.bg} border border-white/10 ${
                 isShowing && currentShowingIndex >= 0 && sequence[currentShowingIndex] === index 
-                  ? 'ring-4 ring-yellow-400 scale-125 shadow-2xl' : ''
+                  ? 'ring-2 ring-white/60 scale-105' : ''
               } ${
-                gameState === 'input' ? 'cursor-pointer transform hover:scale-110' : 'cursor-default'
+                gameState === 'input' ? 'cursor-pointer' : 'cursor-default'
               }`}
               onClick={() => handleTileClick(index)}
-              whileHover={gameState === 'input' ? { scale: 1.1, y: -5 } : {}}
+              whileHover={gameState === 'input' ? { scale: 1.03 } : {}}
               whileTap={{ scale: 0.95 }}
               disabled={gameState !== 'input'}
               initial={{ scale: 0, rotate: 180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              {isShowing && currentShowingIndex >= 0 && sequence[currentShowingIndex] === index && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="text-3xl"
-                >
-                  ✨
-                </motion.div>
-              )}
+              {/* minimal tile */}
             </motion.button>
           ))}
         </motion.div>
@@ -700,26 +648,13 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
           transition={{ delay: 0.5 }}
         >
           {gameState === 'showing' && (
-            <div className="bg-blue-100 border-2 border-blue-200 rounded-2xl p-4">
-              <div className="text-blue-700 font-bold text-xl flex items-center justify-center">
-                👀 Watch the colors carefully!
-              </div>
-            </div>
+            <div className="border border-[#2d3748] bg-[#1f2046] rounded-md p-3 text-slate-300">Watch the sequence…</div>
           )}
           {gameState === 'input' && (
-            <div className="bg-green-100 border-2 border-green-200 rounded-2xl p-4">
-              <div className="text-green-700 font-bold text-xl flex items-center justify-center">
-                🎯 Now repeat the sequence!
-              </div>
-            </div>
+            <div className="border border-[#2d3748] bg-[#1f2046] rounded-md p-3 text-slate-300">Repeat the sequence.</div>
           )}
           {gameOver && (
-            <div className="bg-red-100 border-2 border-red-200 rounded-2xl p-4 mt-4">
-              <div className="text-red-700 font-bold text-xl flex items-center justify-center">
-                <XCircle className="w-6 h-6 mr-2" />
-                Game over! You can try again!
-              </div>
-            </div>
+            <div className="border border-red-900 bg-red-900/20 rounded-md p-3 mt-4 text-red-200 text-sm flex items-center justify-center"><XCircle className="w-4 h-4 mr-2" /> Attempt complete. You can try again.</div>
           )}
         </motion.div>
 
@@ -730,13 +665,13 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
           >
-            <div className="bg-white rounded-2xl p-4 shadow-lg border border-purple-200">
-              <div className="text-purple-700 font-bold text-lg mb-2">Your sequence:</div>
+            <div className="bg-[#1f2046] rounded-md p-4 border border-[#2d3748]">
+              <div className="text-slate-300 font-medium text-sm mb-2">Your sequence:</div>
               <div className="flex justify-center space-x-2">
                 {userSequence.map((colorIndex, index) => (
                   <motion.div
                     key={index}
-                    className={`w-8 h-8 rounded-full ${colors[colorIndex].bg} border-2 border-white shadow-md`}
+                    className={`w-8 h-8 rounded-full ${colors[colorIndex].bg} border border-white/10`}
                     initial={{ scale: 0, rotate: 180 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: index * 0.1 }}
@@ -754,9 +689,9 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
           >
-            <div className="bg-yellow-100 border-2 border-yellow-300 rounded-2xl p-4 flex items-center justify-center">
-              <Lightbulb className="w-6 h-6 text-yellow-500 mr-2" />
-              <span className="text-yellow-800 font-bold">Hint: The first color is <span className="underline">{colors[sequence[0]].name}</span></span>
+            <div className="border border-[#2d3748] bg-[#1f2046] rounded-md p-3 flex items-center justify-center">
+              <Lightbulb className="w-4 h-4 text-[#3b82f6] mr-2" />
+              <span className="text-slate-300 text-sm">Hint: The first tile is <span className="underline">{colors[sequence[0]].name}</span></span>
             </div>
           </motion.div>
         )}
@@ -764,27 +699,27 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
         {/* Hint Button */}
         {!gameOver && (
           <motion.button
-            className="bg-yellow-300 text-white px-6 py-3 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl mt-4 flex items-center space-x-2 mx-auto"
+            className="bg-[#3b82f6] text-white px-6 py-3 rounded-md font-medium mt-4 flex items-center space-x-2 mx-auto"
             onClick={handleHint}
-            whileHover={{ scale: 1.05, y: -2 }}
+            whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Lightbulb className="w-5 h-5" />
+            <Lightbulb className="w-4 h-4" />
             <span>Hint</span>
           </motion.button>
         )}
 
                  {/* Camera Recording Controls */}
          <motion.div 
-           className="bg-blue-50 rounded-2xl p-4 border border-blue-200 mt-6"
+           className="rounded-md p-4 border border-[#2d3748] mt-6 bg-[#1f2046]"
            initial={{ y: 20, opacity: 0 }}
            animate={{ y: 0, opacity: 1 }}
            transition={{ delay: 0.6 }}
          >
-           <div className="text-blue-800 text-sm mb-3">
-             <div className="font-bold mb-2 flex items-center">
+           <div className="text-slate-200 text-sm mb-3">
+             <div className="font-medium mb-2 flex items-center">
                <Camera className="w-4 h-4 mr-2" />
-               Record Your Face:
+               Optional recording
              </div>
            </div>
            
@@ -797,7 +732,7 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
              >
                <video
                  ref={videoRef}
-                 className="w-48 h-36 rounded-lg border-2 border-blue-300 shadow-lg"
+                 className="w-56 h-40 rounded-md border border-[#2d3748]"
                  autoPlay
                  muted
                  playsInline
@@ -806,20 +741,20 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
            )}
            
            {!isRecording ? (
-             <motion.button
-               className="bg-green-500 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl flex items-center mx-auto"
+            <motion.button
+              className="bg-[#10b981] text-white px-4 py-2 rounded-md font-medium flex items-center mx-auto"
                onClick={startRecording}
-               whileHover={{ scale: 1.05, y: -2 }}
+              whileHover={{ scale: 1.03 }}
                whileTap={{ scale: 0.95 }}
                disabled={gameState === 'showing' || gameOver}
              >
                <Video className="w-4 h-4 mr-2" />
-               Start Recording
+              Start
              </motion.button>
            ) : (
              <div className="flex items-center justify-center space-x-4">
                <motion.div
-                 className="flex items-center bg-red-500 text-white px-3 py-1 rounded-lg"
+                 className="flex items-center bg-red-600 text-white px-3 py-1 rounded-md"
                  animate={{ scale: [1, 1.1, 1] }}
                  transition={{ duration: 1, repeat: Infinity }}
                >
@@ -827,7 +762,7 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
                  Recording: {Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')}
                </motion.div>
                <motion.button
-                 className="bg-red-500 text-white px-3 py-1 rounded-lg font-semibold flex items-center"
+                 className="bg-red-600 text-white px-3 py-1 rounded-md font-medium flex items-center"
                  onClick={stopRecording}
                  whileHover={{ scale: 1.05 }}
                  whileTap={{ scale: 0.95 }}
@@ -840,13 +775,13 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
            
            {showCameraPermission && (
              <motion.div 
-               className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded-lg"
+               className="mt-3 p-3 bg-[#332] border border-[#553] rounded-md"
                initial={{ scale: 0 }}
                animate={{ scale: 1 }}
              >
-               <div className="text-yellow-800 text-xs">
-                 <div className="font-bold">⚠️ Camera Permission Required</div>
-                 <div>Please allow camera access to record your face during gameplay</div>
+               <div className="text-amber-200 text-xs">
+                 <div className="font-medium">Camera permission required</div>
+                 <div>Allow camera access to enable recording.</div>
                </div>
              </motion.div>
            )}
@@ -854,17 +789,16 @@ export default function SequenceRecallGame({ onComplete }: GameProps) {
 
         {/* Instructions */}
         <motion.div 
-          className="bg-yellow-50 rounded-2xl p-4 border border-yellow-200 mt-6"
+          className="rounded-md p-4 border border-[#2d3748] mt-6 bg-[#1f2046]"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.7 }}
         >
-          <div className="text-yellow-800 text-sm">
-            <div className="font-bold mb-1">💡 How to play:</div>
-            <div>1. Watch the colors light up</div>
+          <div className="text-slate-300 text-sm text-left">
+            <div className="font-medium mb-1">How to play</div>
+            <div>1. Watch the tiles light up</div>
             <div>2. Remember the order</div>
-            <div>3. Click the colors in the same order</div>
-                         <div>4. Record your face to review later!</div>
+            <div>3. Click the tiles in the same order</div>
           </div>
         </motion.div>
       </div>

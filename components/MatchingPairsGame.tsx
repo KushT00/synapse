@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { RotateCcw, CheckCircle, XCircle, Star, Heart, Sparkles, Camera, Video, StopCircle } from "lucide-react";
+import { RotateCcw, Camera, Video, StopCircle } from "lucide-react";
 
 interface GameResult {
   gameId: string;
@@ -45,7 +45,7 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const symbols = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼'];
+  const symbols = ['◆','●','■','▲','★','✚'];
 
   useEffect(() => {
     initializeGame();
@@ -482,7 +482,7 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
   };
 
   return (
-    <div className="text-center bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 min-h-screen p-6">
+    <div className="text-center min-h-screen p-6 bg-[#1a1b3e]">
       {/* Celebration Animation */}
       {showCelebration && (
         <motion.div
@@ -526,31 +526,29 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
         >
-          <h3 className="text-4xl font-bold text-gray-800 mb-2 flex items-center justify-center">
-            <Heart className="w-8 h-8 text-red-500 mr-2" />
-            Animal Memory Game
-            <Heart className="w-8 h-8 text-red-500 ml-2" />
+          <h3 className="text-3xl font-semibold text-white mb-2 flex items-center justify-center">
+            Matching Pairs
           </h3>
-          <p className="text-xl text-gray-600 mb-4">Find the matching animal pairs!</p>
+          <p className="text-base text-slate-300 mb-4">Flip two cards. Match all pairs.</p>
           
           {/* Progress Bar */}
-          <div className="bg-white rounded-full h-4 mb-4 overflow-hidden shadow-inner">
+          <div className="bg-[#2d3748] rounded-full h-2 mb-4 overflow-hidden">
             <motion.div
-              className="bg-gradient-to-r from-green-400 to-blue-500 h-full rounded-full"
+              className="bg-[#10b981] h-full rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${(matches / 6) * 100}%` }}
               transition={{ duration: 0.5 }}
             />
           </div>
           
-          <div className="flex justify-center space-x-8 text-lg">
-            <div className="bg-white px-4 py-2 rounded-2xl shadow-lg">
-              <span className="text-blue-600 font-bold">Moves: </span>
-              <span className="text-2xl font-bold text-blue-600">{moves}</span>
+          <div className="flex justify-center space-x-4 text-sm">
+            <div className="bg-[#1f2046] border border-[#2d3748] px-4 py-2 rounded-md">
+              <span className="text-slate-300">Moves: </span>
+              <span className="text-white font-semibold">{moves}</span>
             </div>
-            <div className="bg-white px-4 py-2 rounded-2xl shadow-lg">
-              <span className="text-green-600 font-bold">Matches: </span>
-              <span className="text-2xl font-bold text-green-600">{matches}/6</span>
+            <div className="bg-[#1f2046] border border-[#2d3748] px-4 py-2 rounded-md">
+              <span className="text-slate-300">Matches: </span>
+              <span className="text-white font-semibold">{matches}/6</span>
             </div>
           </div>
         </motion.div>
@@ -565,17 +563,13 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
           {cards.map((card, index) => (
             <motion.button
               key={card.id}
-              className={`w-20 h-20 rounded-3xl shadow-xl flex items-center justify-center text-3xl border-4 ${
+              className={`w-20 h-20 rounded-lg flex items-center justify-center text-2xl border ${
                 card.isFlipped || card.isMatched 
-                  ? 'bg-white border-green-300 shadow-2xl' 
-                  : 'bg-gradient-to-br from-blue-400 to-purple-500 border-white hover:from-blue-500 hover:to-purple-600'
-              } ${
-                card.isMatched 
-                  ? 'ring-4 ring-green-400 scale-105' 
-                  : 'hover:scale-105 cursor-pointer'
-              }`}
+                  ? 'bg-[#1f2046] border-[#2d3748] text-white' 
+                  : 'bg-[#2d3748] border-[#2d3748] text-slate-200 hover:border-[#3b82f6]'
+              } ${card.isMatched ? 'ring-2 ring-[#10b981]' : 'cursor-pointer'}`}
               onClick={() => handleCardClick(card.id)}
-              whileHover={!card.isMatched ? { scale: 1.05, y: -3 } : {}}
+              whileHover={!card.isMatched ? { scale: 1.03 } : {}}
               whileTap={{ scale: 0.95 }}
               disabled={card.isMatched || gameCompleted}
               initial={{ scale: 0, rotate: 180 }}
@@ -583,21 +577,9 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
               transition={{ delay: index * 0.05 }}
             >
               {(card.isFlipped || card.isMatched) ? (
-                <motion.div
-                  initial={{ scale: 0, rotate: 180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  className="text-3xl"
-                >
-                  {card.value}
-                </motion.div>
+                <div className="text-2xl select-none">{card.value}</div>
               ) : (
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="text-2xl text-white"
-                >
-                  ❓
-                </motion.div>
+                <div className="text-lg select-none">•</div>
               )}
             </motion.button>
           ))}
@@ -611,39 +593,27 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
           transition={{ delay: 0.5 }}
         >
           {gameCompleted ? (
-            <div className="bg-green-100 border-2 border-green-300 rounded-2xl p-4">
-              <div className="text-green-700 font-bold text-xl flex items-center justify-center">
-                <Sparkles className="w-6 h-6 mr-2 text-yellow-500" />
-                Congratulations! All pairs matched!
-              </div>
+            <div className="border border-[#10b981] bg-[#1f2046] rounded-md p-3 text-[#10b981] text-sm">
+              Session complete. All pairs matched.
             </div>
           ) : (
-            <div className="bg-blue-100 border-2 border-blue-300 rounded-2xl p-4">
-              <div className="text-blue-700 font-bold text-xl flex items-center justify-center">
-                <motion.div
-                  animate={{ y: [0, -5, 0] }}
-                  transition={{ duration: 0.5, repeat: Infinity }}
-                  className="mr-2"
-                >
-                  🎯
-                </motion.div>
-                Find all the matching animals!
-              </div>
+            <div className="border border-[#2d3748] bg-[#1f2046] rounded-md p-3 text-slate-300 text-sm">
+              Flip two cards and find all pairs.
             </div>
           )}
         </motion.div>
 
         {/* Camera Recording Controls */}
         <motion.div 
-          className="bg-blue-50 rounded-2xl p-4 border border-blue-200 mt-6"
+          className="rounded-md p-4 border border-[#2d3748] mt-6 bg-[#1f2046]"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          <div className="text-blue-800 text-sm mb-3">
-            <div className="font-bold mb-2 flex items-center">
+          <div className="text-slate-200 text-sm mb-3">
+            <div className="font-medium mb-2 flex items-center">
               <Camera className="w-4 h-4 mr-2" />
-              Record Your Face:
+              Optional recording
             </div>
           </div>
           
@@ -656,7 +626,7 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
             >
               <video
                 ref={videoRef}
-                className="w-48 h-36 rounded-lg border-2 border-blue-300 shadow-lg"
+                className="w-56 h-40 rounded-md border border-[#2d3748]"
                 autoPlay
                 muted
                 playsInline
@@ -666,19 +636,19 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
           
           {!isRecording ? (
             <motion.button
-              className="bg-green-500 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl flex items-center mx-auto"
+              className="bg-[#10b981] text-white px-4 py-2 rounded-md font-medium flex items-center mx-auto"
               onClick={startRecording}
-              whileHover={{ scale: 1.05, y: -2 }}
+              whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.95 }}
               disabled={gameCompleted}
             >
               <Video className="w-4 h-4 mr-2" />
-              Start Recording
+              Start
             </motion.button>
           ) : (
             <div className="flex items-center justify-center space-x-4">
               <motion.div
-                className="flex items-center bg-red-500 text-white px-3 py-1 rounded-lg"
+                className="flex items-center bg-red-600 text-white px-3 py-1 rounded-md"
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
               >
@@ -686,7 +656,7 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
                 Recording: {Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')}
               </motion.div>
               <motion.button
-                className="bg-red-500 text-white px-3 py-1 rounded-lg font-semibold flex items-center"
+                className="bg-red-600 text-white px-3 py-1 rounded-md font-medium flex items-center"
                 onClick={stopRecording}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -699,13 +669,13 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
           
           {showCameraPermission && (
             <motion.div 
-              className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded-lg"
+              className="mt-3 p-3 bg-[#332] border border-[#553] rounded-md"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
             >
-              <div className="text-yellow-800 text-xs">
-                <div className="font-bold">⚠️ Camera Permission Required</div>
-                <div>Please allow camera access to record your face during gameplay</div>
+              <div className="text-amber-200 text-xs">
+                <div className="font-medium">Camera permission required</div>
+                <div>Allow camera access to enable recording.</div>
               </div>
             </motion.div>
           )}
@@ -713,32 +683,31 @@ export default function MatchingPairsGame({ onComplete }: GameProps) {
 
         {/* Instructions */}
         <motion.div 
-          className="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-2xl p-4 border-2 border-yellow-300 mt-6"
+          className="rounded-md p-4 border border-[#2d3748] mt-6 bg-[#1f2046]"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.7 }}
         >
-          <div className="text-orange-800 text-sm">
-            <div className="font-bold mb-1">💡 How to play:</div>
+          <div className="text-slate-300 text-sm text-left">
+            <div className="font-medium mb-1">How to play</div>
             <div>1. Click on any card to flip it</div>
-            <div>2. Find the matching animal</div>
-            <div>3. Match all pairs to win!</div>
-            <div>4. Record your face to review later!</div>
+            <div>2. Find the matching symbol</div>
+            <div>3. Match all pairs to complete the session</div>
           </div>
         </motion.div>
 
         {/* Reset Button */}
         <motion.button
-          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl mt-6 flex items-center space-x-2 mx-auto"
+          className="bg-[#3b82f6] text-white px-6 py-3 rounded-md font-medium mt-6 flex items-center space-x-2 mx-auto"
           onClick={initializeGame}
-          whileHover={{ scale: 1.05, y: -2 }}
+          whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.95 }}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
           <RotateCcw className="w-5 h-5" />
-          <span>Play Again</span>
+          <span>Restart</span>
         </motion.button>
       </div>
     </div>

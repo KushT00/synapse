@@ -19,7 +19,7 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
     {
       id: '2',
       name: 'Dr. Arjun Patel',
-      specializations: ['Relationship Issues', 'Social Anxiety', 'Study Stress'],
+      specializations: ['Relationship Issues', 'Cognitive', 'Study Cognitive'],
       rating: 4.9,
       availability: ['Tuesday', 'Thursday', 'Saturday'],
       image: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=150&h=150&fit=crop&crop=face'
@@ -35,7 +35,7 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
     {
       id: '4',
       name: 'Dr. Rajesh Kumar',
-      specializations: ['Depression', 'Exam Anxiety', 'Adjustment Issues'],
+      specializations: ['Depression', 'Cognitive during Exams', 'Adjustment Issues'],
       rating: 4.6,
       availability: ['Wednesday', 'Thursday', 'Friday'],
       image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face'
@@ -62,7 +62,7 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
       counselor: 'Group Session',
       date: '2025-09-27',
       time: '4:00 PM',
-      type: 'Stress Management Group',
+      type: 'Cognitive Management Group',
       mode: 'Virtual',
       status: 'confirmed'
     }

@@ -265,7 +265,7 @@ export default function MentalHealthPlanner() {
               <div className="text-center p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
                 <div className="flex items-center justify-center mb-2">
                   <AlertTriangle className="w-6 h-6 text-yellow-500 mr-2" />
-                  <h3 className="font-semibold">GAD-7 (Anxiety)</h3>
+                  <h3 className="font-semibold">GAD-7 (Cognitive)</h3>
                 </div>
                 <div className="text-3xl font-bold text-green-600 mb-2">{scores.gad7}/21</div>
                 {result && result.success && (
@@ -305,7 +305,7 @@ export default function MentalHealthPlanner() {
                 <Label htmlFor="prompt">Your Message</Label>
                 <Textarea
                   id="prompt"
-                  placeholder="e.g., I've been having trouble sleeping lately, or I need help with work-related stress, or I'm interested in meditation techniques..."
+                  placeholder="e.g., I've been having trouble sleeping lately, or I need help with cognitive, or I'm interested in meditation techniques..."
                   value={userPrompt}
                   onChange={(e) => setUserPrompt(e.target.value)}
                   className="min-h-[100px] mt-2"

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Play, RotateCcw, CheckCircle, XCircle, Star, Target, Zap, Trophy } from "lucide-react";
+import { Play, RotateCcw, Star, Target, Trophy } from "lucide-react";
 
 interface GameResult {
   gameId: string;
@@ -28,41 +28,7 @@ interface Target {
   type: 'target' | 'distractor';
 }
 
-// Voice feedback phrases
-const correctVoices = [
-  "Bullseye! Great shot!",
-  "Perfect hit! You're on fire!",
-  "Awesome targeting! Keep it up!",
-  "Excellent focus! You got it!",
-  "Spot on! You're a sharpshooter!"
-];
-const wrongVoices = [
-  "Oops! That was a distractor!",
-  "Careful! Focus on the right targets!",
-  "Almost! Look for the correct ones!",
-  "Not quite! Stay focused!",
-  "Keep trying! You'll get it!"
-];
-const missedVoices = [
-  "Oh no! You missed that one!",
-  "Too slow! Try to be faster!",
-  "Missed it! Stay alert!",
-  "Come on! You can do better!",
-  "Don't let them get away!"
-];
-
-function speak(text: string) {
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    const utter = new window.SpeechSynthesisUtterance(text);
-    utter.rate = 1.15;
-    utter.pitch = 1.4;
-    const voices = window.speechSynthesis.getVoices();
-    const childVoice = voices.find(v => v.name.toLowerCase().includes('child') || v.name.toLowerCase().includes('kid'));
-    if (childVoice) utter.voice = childVoice;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utter);
-  }
-}
+// Remove playful speech feedback for professional tone
 
 export default function WhackATargetGame({ onComplete }: GameProps) {
   const [targets, setTargets] = useState<Target[]>([]);
@@ -165,7 +131,6 @@ export default function WhackATargetGame({ onComplete }: GameProps) {
           ));
           if (randomTarget.isCorrect) {
             setMissedTargets(prev => prev + 1);
-            speak(missedVoices[Math.floor(Math.random() * missedVoices.length)]);
           }
         }, targetDuration);
       }
@@ -191,11 +156,9 @@ export default function WhackATargetGame({ onComplete }: GameProps) {
       setScore(prev => prev + points);
       setCorrectHits(prev => prev + 1);
       setCombo(prev => prev + 1);
-      speak(correctVoices[Math.floor(Math.random() * correctVoices.length)]);
     } else {
       setWrongHits(prev => prev + 1);
       setCombo(0);
-      speak(wrongVoices[Math.floor(Math.random() * wrongVoices.length)]);
     }
   };
 

@@ -1,281 +1,211 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
+import { 
+  Card, CardContent, CardDescription, CardHeader, CardTitle 
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
-  Star, 
-  Trophy, 
-  Medal, 
-  Award, 
-  Download, 
-  Sparkles, 
-  Zap, 
-  Heart, 
-  Target, 
-  BookOpen,
-  Brain,
-  Lightbulb,
-  Users,
-  Clock,
-  CheckCircle,
-  Play,
-  Pause,
-  RotateCcw,
-  Gift,
-  PartyPopper,
-  Rocket,
-  Crown,
-  Gem,
-  Rainbow
+  Star, Trophy, Medal, Award, Download, Target, 
+  BookOpen, Brain, Users, Clock, CheckCircle, 
+  TrendingUp, Activity, FileText, User 
 } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 
-interface Badge {
+interface Achievement {
   id: string;
   name: string;
   description: string;
-  icon: React.ReactNode;
+  category: string;
   unlocked: boolean;
   progress: number;
   maxProgress: number;
-  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  level: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
   unlockedAt?: Date;
-  emoji: string;
 }
 
-interface Avatar {
+interface ProfileAvatar {
   id: string;
   name: string;
-  image: string;
   unlocked: boolean;
-  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  level: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
   requiredLevel: number;
-  emoji: string;
 }
 
-interface Comic {
+interface Resource {
   id: string;
   title: string;
   description: string;
-  coverImage: string;
+  type: string;
   downloadUrl: string;
-  requiredStars: number;
+  requiredPoints: number;
   unlocked: boolean;
-  emoji: string;
 }
 
-export default function RewardPage() {
-  const [totalStars, setTotalStars] = useState(1250);
+type TabType = "overview" | "achievements" | "profile" | "resources";
+
+interface TabButtonProps {
+  tab: TabType;
+  title: string;
+  icon: React.ReactNode;
+  isActive: boolean;
+  onClick: (tab: TabType) => void;
+}
+
+const TabButton: React.FC<TabButtonProps> = ({ tab, title, icon, isActive, onClick }) => (
+  <Button
+    variant={isActive ? "default" : "ghost"}
+    onClick={() => onClick(tab)}
+    className={`flex items-center space-x-3 px-6 py-4 text-base font-medium rounded-lg ${
+      isActive 
+        ? "bg-blue-600 text-white shadow-sm" 
+        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+    }`}
+  >
+    {icon}
+    <span>{title}</span>
+  </Button>
+);
+
+export default function ProfessionalRewardPage() {
+  const [totalPoints] = useState(1250);
   const [currentLevel, setCurrentLevel] = useState(8);
   const [experience, setExperience] = useState(1250);
   const [maxExperience, setMaxExperience] = useState(2000);
-  const [selectedAvatar, setSelectedAvatar] = useState('avatar-1');
+  const [selectedAvatar, setSelectedAvatar] = useState("avatar-1");
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>("overview");
 
-  const badges: Badge[] = [
+  const achievements: Achievement[] = [
     {
-      id: 'first-steps',
-      name: 'First Steps',
-      description: 'Complete your first learning session',
-      icon: <BookOpen className="h-4 w-4" />,
+      id: "getting-started",
+      name: "Getting Started",
+      description: "Successfully completed your first learning session - a great beginning to your learning journey",
+      category: "Learning",
       unlocked: true,
       progress: 1,
       maxProgress: 1,
-      rarity: 'common',
-      unlockedAt: new Date('2024-01-15'),
-      emoji: '👶'
+      level: "Bronze",
+      unlockedAt: new Date("2024-01-15"),
     },
     {
-      id: 'brain-booster',
-      name: 'Brain Booster',
-      description: 'Complete 10 memory games',
-      icon: <Brain className="h-4 w-4" />,
+      id: "memory-training",
+      name: "Memory Training",
+      description: "Completed 10 memory enhancement exercises - your cognitive skills are improving",
+      category: "Cognitive",
       unlocked: true,
       progress: 10,
       maxProgress: 10,
-      rarity: 'common',
-      unlockedAt: new Date('2024-01-20'),
-      emoji: '🧠'
+      level: "Bronze",
+      unlockedAt: new Date("2024-01-20"),
     },
     {
-      id: 'problem-solver',
-      name: 'Problem Solver',
-      description: 'Solve 25 puzzles',
-      icon: <Lightbulb className="h-4 w-4" />,
+      id: "problem-solving",
+      name: "Critical Thinking",
+      description: "Successfully solved 25 problem-solving exercises - you're developing excellent analytical skills",
+      category: "Cognitive",
       unlocked: false,
       progress: 18,
       maxProgress: 25,
-      rarity: 'rare',
-      emoji: '🧩'
+      level: "Silver",
     },
     {
-      id: 'social-butterfly',
-      name: 'Social Butterfly',
-      description: 'Participate in 5 group activities',
-      icon: <Users className="h-4 w-4" />,
+      id: "social-engagement",
+      name: "Community Participant",
+      description: "Actively participated in 5 group learning sessions - connecting and learning with others",
+      category: "Social",
       unlocked: false,
       progress: 3,
       maxProgress: 5,
-      rarity: 'rare',
-      emoji: '🦋'
+      level: "Silver",
     },
     {
-      id: 'speed-demon',
-      name: 'Speed Demon',
-      description: 'Complete 5 sessions under 10 minutes',
-      icon: <Zap className="h-4 w-4" />,
-      unlocked: false,
-      progress: 2,
-      maxProgress: 5,
-      rarity: 'epic',
-      emoji: '⚡'
-    },
-    {
-      id: 'dedication',
-      name: 'Dedication',
-      description: 'Log in for 30 consecutive days',
-      icon: <Clock className="h-4 w-4" />,
+      id: "consistency",
+      name: "Dedicated Learner",
+      description: "Maintained consistent learning for 30 consecutive days - dedication is the key to growth",
+      category: "Dedication",
       unlocked: false,
       progress: 15,
       maxProgress: 30,
-      rarity: 'epic',
-      emoji: '⏰'
+      level: "Gold",
     },
     {
-      id: 'perfectionist',
-      name: 'Perfectionist',
-      description: 'Achieve 100% accuracy in 10 sessions',
-      icon: <CheckCircle className="h-4 w-4" />,
+      id: "excellence",
+      name: "Excellence in Learning",
+      description: "Achieved perfect scores in 10 different sessions - demonstrating mastery and attention to detail",
+      category: "Performance",
       unlocked: false,
       progress: 7,
       maxProgress: 10,
-      rarity: 'legendary',
-      emoji: '👑'
-    }
+      level: "Platinum",
+    },
+    {
+      id: "speed-learner",
+      name: "Efficient Learner",
+      description: "Completed 5 sessions in under 10 minutes each - quick thinking and effective learning",
+      category: "Performance",
+      unlocked: false,
+      progress: 2,
+      maxProgress: 5,
+      level: "Gold",
+    },
+    {
+      id: "helping-others",
+      name: "Mentor",
+      description: "Helped 3 other learners with their studies - sharing knowledge benefits everyone",
+      category: "Social",
+      unlocked: false,
+      progress: 1,
+      maxProgress: 3,
+      level: "Gold",
+    },
   ];
 
-  const avatars: Avatar[] = [
-    {
-      id: 'avatar-1',
-      name: 'Explorer',
-      image: '/api/placeholder/64/64',
-      unlocked: true,
-      rarity: 'common',
-      requiredLevel: 1,
-      emoji: '🧭'
-    },
-    {
-      id: 'avatar-2',
-      name: 'Scholar',
-      image: '/api/placeholder/64/64',
-      unlocked: true,
-      rarity: 'common',
-      requiredLevel: 3,
-      emoji: '🎓'
-    },
-    {
-      id: 'avatar-3',
-      name: 'Wizard',
-      image: '/api/placeholder/64/64',
-      unlocked: true,
-      rarity: 'rare',
-      requiredLevel: 5,
-      emoji: '🧙‍♂️'
-    },
-    {
-      id: 'avatar-4',
-      name: 'Knight',
-      image: '/api/placeholder/64/64',
-      unlocked: false,
-      rarity: 'rare',
-      requiredLevel: 7,
-      emoji: '⚔️'
-    },
-    {
-      id: 'avatar-5',
-      name: 'Dragon',
-      image: '/api/placeholder/64/64',
-      unlocked: false,
-      rarity: 'epic',
-      requiredLevel: 10,
-      emoji: '🐉'
-    },
-    {
-      id: 'avatar-6',
-      name: 'Phoenix',
-      image: '/api/placeholder/64/64',
-      unlocked: false,
-      rarity: 'legendary',
-      requiredLevel: 15,
-      emoji: '🔥'
-    }
+  const avatars: ProfileAvatar[] = [
+    { id: "avatar-1", name: "Classic Explorer", unlocked: true, level: "Bronze", requiredLevel: 1 },
+    { id: "avatar-2", name: "Professional Scholar", unlocked: true, level: "Bronze", requiredLevel: 3 },
+    { id: "avatar-3", name: "Distinguished Mentor", unlocked: true, level: "Silver", requiredLevel: 5 },
+    { id: "avatar-4", name: "Executive Leader", unlocked: false, level: "Silver", requiredLevel: 7 },
+    { id: "avatar-5", name: "Master Educator", unlocked: false, level: "Gold", requiredLevel: 10 },
+    { id: "avatar-6", name: "Wisdom Keeper", unlocked: false, level: "Platinum", requiredLevel: 15 },
   ];
 
-  const comics: Comic[] = [
-    {
-      id: 'comic-1',
-      title: 'The Learning Adventure',
-      description: 'Join our hero on an epic journey through knowledge!',
-      coverImage: '/api/placeholder/200/300',
-      downloadUrl: '/comics/learning-adventure.pdf',
-      requiredStars: 100,
-      unlocked: true,
-      emoji: '📚'
-    },
-    {
-      id: 'comic-2',
-      title: 'Memory Masters',
-      description: 'Discover the secrets of powerful memory techniques',
-      coverImage: '/api/placeholder/200/300',
-      downloadUrl: '/comics/memory-masters.pdf',
-      requiredStars: 500,
-      unlocked: true,
-      emoji: '🧠'
-    },
-    {
-      id: 'comic-3',
-      title: 'Problem Solving Heroes',
-      description: 'Learn to tackle challenges like a true hero',
-      coverImage: '/api/placeholder/200/300',
-      downloadUrl: '/comics/problem-solving-heroes.pdf',
-      requiredStars: 1000,
-      unlocked: false,
-      emoji: '🦸‍♂️'
-    }
+  const resources: Resource[] = [
+    { id: "guide-1", title: "Memory Enhancement Guide", description: "Comprehensive techniques and exercises...", type: "PDF Guide", downloadUrl: "/guides/memory-enhancement.pdf", requiredPoints: 100, unlocked: true },
+    { id: "guide-2", title: "Cognitive Fitness Manual", description: "Evidence-based exercises and strategies...", type: "PDF Manual", downloadUrl: "/guides/cognitive-fitness.pdf", requiredPoints: 500, unlocked: true },
+    { id: "guide-3", title: "Advanced Learning Strategies", description: "Advanced techniques for lifelong learning...", type: "PDF Handbook", downloadUrl: "/guides/advanced-learning.pdf", requiredPoints: 1000, unlocked: false },
+    { id: "guide-4", title: "Social Learning Companion", description: "Methods for engaging with others...", type: "PDF Guide", downloadUrl: "/guides/social-learning.pdf", requiredPoints: 750, unlocked: false },
+    { id: "guide-5", title: "Problem-Solving Mastery", description: "Step-by-step approaches to tackle complex problems...", type: "PDF Manual", downloadUrl: "/guides/problem-solving.pdf", requiredPoints: 1250, unlocked: false },
   ];
 
-  const getRarityColor = (rarity: string) => {
-    switch (rarity) {
-      case 'common': return 'bg-green-50 text-green-700 border-green-200';
-      case 'rare': return 'bg-blue-50 text-blue-700 border-blue-200';
-      case 'epic': return 'bg-purple-50 text-purple-700 border-purple-200';
-      case 'legendary': return 'bg-yellow-50 text-yellow-700 border-yellow-200';
-      default: return 'bg-green-50 text-green-700 border-green-200';
+  const getLevelColor = (level: string) => {
+    switch (level) {
+      case "Bronze": return "bg-orange-50 text-orange-800 border-orange-200";
+      case "Silver": return "bg-gray-50 text-gray-800 border-gray-200";
+      case "Gold": return "bg-yellow-50 text-yellow-800 border-yellow-200";
+      case "Platinum": return "bg-purple-50 text-purple-800 border-purple-200";
+      default: return "bg-orange-50 text-orange-800 border-orange-200";
     }
   };
 
-  const getRarityIcon = (rarity: string) => {
-    switch (rarity) {
-      case 'common': return <Star className="h-3 w-3" />;
-      case 'rare': return <Medal className="h-3 w-3" />;
-      case 'epic': return <Trophy className="h-3 w-3" />;
-      case 'legendary': return <Crown className="h-3 w-3" />;
-      default: return <Star className="h-3 w-3" />;
+  const getLevelIcon = (level: string) => {
+    switch (level) {
+      case "Bronze": return <Medal className="h-4 w-4" />;
+      case "Silver": return <Award className="h-4 w-4" />;
+      case "Gold": return <Trophy className="h-4 w-4" />;
+      case "Platinum": return <Star className="h-4 w-4" />;
+      default: return <Medal className="h-4 w-4" />;
     }
   };
 
-  const handleDownloadComic = async (comic: Comic) => {
+  const handleDownloadResource = async (resource: Resource) => {
     setIsDownloading(true);
     setDownloadProgress(0);
 
-    // Simulate download progress
     const interval = setInterval(() => {
-      setDownloadProgress(prev => {
+      setDownloadProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsDownloading(false);
@@ -286,264 +216,59 @@ export default function RewardPage() {
       });
     }, 200);
 
-    // Download the specific PDF file
     setTimeout(() => {
-      const link = document.createElement('a');
-      link.href = '/TSEC-SigmaBois-Story.pdf';
-      link.download = 'TSEC-SigmaBois-Story.pdf';
+      const link = document.createElement("a");
+      link.href = resource.downloadUrl;
+      link.download = resource.title + ".pdf";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }, 2000);
   };
 
-  const unlockedBadges = badges.filter(badge => badge.unlocked);
-  const lockedBadges = badges.filter(badge => !badge.unlocked);
-  const unlockedAvatars = avatars.filter(avatar => avatar.unlocked);
-  const unlockedComics = comics.filter(comic => comic.unlocked);
+  const unlockedAchievements = achievements.filter((a) => a.unlocked);
+  const unlockedResources = resources.filter((r) => r.unlocked);
 
   return (
-    
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-    
-      <div className="container mx-auto p-6 space-y-8">
-        {/* Header Section */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-            🏆 Rewards Center
-          </h1>
-          <p className="text-lg text-slate-600">
-            Track your progress and unlock amazing rewards!
-          </p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-6 py-8 max-w-7xl">
+        {/* Header */}
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">Progress & Achievements</h1>
+          <p className="text-xl text-gray-600">Track your learning journey and unlock valuable resources</p>
         </div>
 
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-white shadow-sm border-0">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl mb-2">⭐</div>
-              <div className="text-2xl font-bold text-slate-800 mb-1">{totalStars}</div>
-              <p className="text-sm text-slate-600">Total Stars</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white shadow-sm border-0">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl mb-2">🏆</div>
-              <div className="text-2xl font-bold text-slate-800 mb-1">{currentLevel}</div>
-              <p className="text-sm text-slate-600">Level</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white shadow-sm border-0">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl mb-2">🎖️</div>
-              <div className="text-2xl font-bold text-slate-800 mb-1">{unlockedBadges.length}</div>
-              <p className="text-sm text-slate-600">Badges</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white shadow-sm border-0">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl mb-2">👤</div>
-              <div className="text-2xl font-bold text-slate-800 mb-1">{unlockedAvatars.length}</div>
-              <p className="text-sm text-slate-600">Avatars</p>
-            </CardContent>
-          </Card>
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap gap-4 mb-8">
+          <TabButton tab="overview" title="Overview" icon={<TrendingUp className="h-5 w-5" />} isActive={activeTab === "overview"} onClick={setActiveTab} />
+          <TabButton tab="achievements" title="Achievements" icon={<Trophy className="h-5 w-5" />} isActive={activeTab === "achievements"} onClick={setActiveTab} />
+          <TabButton tab="profile" title="Profile Settings" icon={<User className="h-5 w-5" />} isActive={activeTab === "profile"} onClick={setActiveTab} />
+          <TabButton tab="resources" title="Resources" icon={<FileText className="h-5 w-5" />} isActive={activeTab === "resources"} onClick={setActiveTab} />
         </div>
 
-        {/* Level Progress */}
-        <Card className="bg-white shadow-sm border-0">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2 text-xl">
-              <Sparkles className="h-5 w-5 text-purple-500" />
-              <span>Level Progress</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span>Level {currentLevel}</span>
-                <span>{experience} / {maxExperience} XP</span>
-              </div>
-              <Progress value={(experience / maxExperience) * 100} className="h-3" />
-              <p className="text-xs text-slate-500">
-                {maxExperience - experience} XP needed for next level
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Badges Section */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold flex items-center space-x-2">
-            <Medal className="h-6 w-6 text-yellow-500" />
-            <span>Badges</span>
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {badges.map((badge) => (
-              <Card key={badge.id} className={`transition-all duration-200 hover:shadow-md ${
-                badge.unlocked ? 'ring-1 ring-green-200' : 'opacity-75'
-              }`}>
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="text-2xl">{badge.emoji}</div>
-                      <div>
-                        <CardTitle className="text-lg">{badge.name}</CardTitle>
-                        <Badge className={`text-xs ${getRarityColor(badge.rarity)}`}>
-                          {getRarityIcon(badge.rarity)}
-                          <span className="ml-1 capitalize">{badge.rarity}</span>
-                        </Badge>
-                      </div>
-                    </div>
-                    {badge.unlocked && (
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-slate-600 mb-3">{badge.description}</p>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-xs">
-                      <span>Progress</span>
-                      <span>{badge.progress} / {badge.maxProgress}</span>
-                    </div>
-                    <Progress value={(badge.progress / badge.maxProgress) * 100} className="h-2" />
-                    {badge.unlocked && badge.unlockedAt && (
-                      <p className="text-xs text-green-600">
-                        Unlocked on {badge.unlockedAt.toLocaleDateString()}
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+        {/* Tab Content */}
+        {activeTab === "overview" && (
+          <div className="space-y-8">
+            {/* Example content */}
+            <Card><CardHeader><CardTitle>Overview Tab</CardTitle></CardHeader></Card>
           </div>
-        </div>
+        )}
 
-        <Separator />
-
-        {/* Avatars Section */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold flex items-center space-x-2">
-            <Users className="h-6 w-6 text-blue-500" />
-            <span>Avatars</span>
-          </h2>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {avatars.map((avatar) => (
-              <Card 
-                key={avatar.id} 
-                className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
-                  selectedAvatar === avatar.id ? 'ring-2 ring-blue-500' : ''
-                } ${!avatar.unlocked ? 'opacity-50' : ''}`}
-                onClick={() => avatar.unlocked && setSelectedAvatar(avatar.id)}
-              >
-                <CardContent className="p-4 text-center">
-                  <div className="text-4xl mb-2">
-                    {avatar.emoji}
-                  </div>
-                  <p className="text-sm font-medium text-slate-800">{avatar.name}</p>
-                  <Badge className={`text-xs mt-1 ${getRarityColor(avatar.rarity)}`}>
-                    {getRarityIcon(avatar.rarity)}
-                    <span className="ml-1 capitalize">{avatar.rarity}</span>
-                  </Badge>
-                  {!avatar.unlocked && (
-                    <p className="text-xs text-slate-500 mt-1">
-                      Level {avatar.requiredLevel} required
-                    </p>
-                  )}
-                  {selectedAvatar === avatar.id && (
-                    <div className="mt-2">
-                      <Badge className="bg-green-100 text-green-800 border-green-300">
-                        <CheckCircle className="h-3 w-3 mr-1" />
-                        Selected
-                      </Badge>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
+        {activeTab === "achievements" && (
+          <div className="space-y-8">
+            <Card><CardHeader><CardTitle>Achievements Tab</CardTitle></CardHeader></Card>
           </div>
-        </div>
+        )}
 
-        <Separator />
-
-        {/* Comics Section */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold flex items-center space-x-2">
-            <BookOpen className="h-6 w-6 text-purple-500" />
-            <span>Comic Downloads</span>
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {comics.map((comic) => (
-              <Card key={comic.id} className={`transition-all duration-200 hover:shadow-md ${
-                !comic.unlocked ? 'opacity-75' : ''
-              }`}>
-                <CardHeader className="pb-3">
-                  <div className="aspect-[2/3] bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg mb-3 flex items-center justify-center">
-                    <span className="text-6xl">{comic.emoji}</span>
-                  </div>
-                  <CardTitle className="text-lg">{comic.title}</CardTitle>
-                  <CardDescription>{comic.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <Star className="h-4 w-4 text-yellow-500" />
-                      <span className="text-sm">
-                        {comic.unlocked ? 'Unlocked' : `${comic.requiredStars} stars required`}
-                      </span>
-                    </div>
-                    
-                    {comic.unlocked ? (
-                      <Button 
-                        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
-                        onClick={() => handleDownloadComic(comic)}
-                        disabled={isDownloading}
-                      >
-                        {isDownloading ? (
-                          <div className="flex items-center space-x-2">
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                            <span>Downloading... {downloadProgress}%</span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center space-x-2">
-                            <Download className="h-4 w-4" />
-                            <span>Download Comic</span>
-                          </div>
-                        )}
-                      </Button>
-                    ) : (
-                      <Button 
-                        variant="outline" 
-                        className="w-full" 
-                        disabled
-                      >
-                        <Target className="h-4 w-4 mr-2" />
-                        Locked
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+        {activeTab === "profile" && (
+          <div className="space-y-8">
+            <Card><CardHeader><CardTitle>Profile Tab</CardTitle></CardHeader></Card>
           </div>
-        </div>
+        )}
 
-        {/* Download Progress Bar */}
-        {isDownloading && (
-          <div className="fixed bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg border">
-            <div className="flex items-center space-x-3">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
-              <div className="space-y-1">
-                <p className="text-sm font-medium">Downloading Comic...</p>
-                <Progress value={downloadProgress} className="w-32 h-2" />
-              </div>
-            </div>
+        {activeTab === "resources" && (
+          <div className="space-y-8">
+            <Card><CardHeader><CardTitle>Resources Tab</CardTitle></CardHeader></Card>
           </div>
         )}
       </div>

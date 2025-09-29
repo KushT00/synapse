@@ -83,7 +83,7 @@ function WhackATargetGameWrapper({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+    <div className="min-h-screen p-6 bg-[#1a1b3e] text-white">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <motion.div 
@@ -93,11 +93,11 @@ function WhackATargetGameWrapper({ onBack }: { onBack: () => void }) {
         >
           <div className="flex items-center justify-between mb-4">
             <button 
-              className="text-blue-600 hover:text-blue-800 font-semibold flex items-center"
+              className="text-slate-200 hover:text-white font-medium flex items-center"
               onClick={onBack}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Games
+              Back
             </button>
           </div>
         </motion.div>
@@ -669,14 +669,14 @@ export default function AttentionPage() {
 
   if (selectedGame) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="min-h-screen bg-[#1a1b3e]">
           {gameComponent}
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-[#1a1b3e]">
       {/* Header */}
       <motion.header 
         className="bg-white shadow-lg border-b border-gray-200"
@@ -697,7 +697,7 @@ export default function AttentionPage() {
         </div>
       </motion.header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <motion.section 
           className="text-center mb-12"
@@ -705,21 +705,19 @@ export default function AttentionPage() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <h1 className="text-5xl font-bold text-gray-800 mb-4 flex items-center justify-center">
-            <Target className="w-12 h-12 text-blue-600 mr-4" />
-            Attention Training Games
-            <Target className="w-12 h-12 text-blue-600 ml-4" />
+          <h1 className="text-3xl font-semibold text-white mb-2 flex items-center justify-center">
+            <Target className="w-7 h-7 text-[#3b82f6] mr-3" />
+            Attention Training
+            <Target className="w-7 h-7 text-[#3b82f6] ml-3" />
           </h1>
-          <p className="text-2xl text-gray-600 max-w-3xl mx-auto mb-6">
-            🎯 Sharpen your focus and concentration with these engaging attention games!
-            <br />
-            <span className="text-lg">Improve your cognitive skills while having fun! 🚀</span>
+          <p className="text-base text-slate-300 max-w-3xl mx-auto mb-6">
+            Improve focus and selective attention through structured drills.
           </p>
           
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 lg:gap-6 max-w-4xl mx-auto mb-8">
             <motion.div 
-              className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100"
+              className="rounded-md p-6 border border-[#2d3748] bg-[#1f2046]"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -728,7 +726,7 @@ export default function AttentionPage() {
               <div className="text-sm text-gray-600">Training Sessions</div>
             </motion.div>
             <motion.div 
-              className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100"
+              className="rounded-md p-6 border border-[#2d3748] bg-[#1f2046]"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -737,7 +735,7 @@ export default function AttentionPage() {
               <div className="text-sm text-gray-600">Improvement</div>
             </motion.div>
             <motion.div 
-              className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100"
+              className="rounded-md p-6 border border-[#2d3748] bg-[#1f2046]"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.5 }}
@@ -746,7 +744,7 @@ export default function AttentionPage() {
               <div className="text-sm text-gray-600">Games Available</div>
             </motion.div>
         <motion.div
-              className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100"
+              className="rounded-md p-6 border border-[#2d3748] bg-[#1f2046]"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.6 }}
@@ -767,7 +765,7 @@ export default function AttentionPage() {
           <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
             🎮 Choose Your Training Game
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {attentionGames.map((game, index) => (
               <motion.div
                 key={game.id}

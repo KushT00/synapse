@@ -189,12 +189,12 @@ export default function MemoryPage() {
 
   if (isPlaying && selectedGame) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
+      <div className="min-h-screen bg-[#1a1b3e] p-4">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-3xl shadow-xl p-6"
+            className="rounded-xl border border-[#2d3748] bg-[#1f2046] p-6 text-white"
           >
             {getGameComponent(selectedGame)}
           </motion.div>
@@ -204,7 +204,7 @@ export default function MemoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-[#1a1b3e] text-white">
       {/* Header removed for a cleaner, more focused kid-friendly experience */}
 
       {/* Main Content */}
@@ -216,15 +216,11 @@ export default function MemoryPage() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <h2 className="text-5xl font-bold text-gray-800 mb-4 flex items-center justify-center">
-            <Star className="w-10 h-10 text-yellow-500 mr-3" />
-            Fun Memory Games!
-            <Star className="w-10 h-10 text-yellow-500 ml-3" />
+          <h2 className="text-3xl font-semibold text-white mb-2 flex items-center justify-center">
+            Memory Training
           </h2>
-          <p className="text-2xl text-gray-600 max-w-3xl mx-auto">
-            🎮 Play these awesome games to make your brain super strong! 
-            <br />
-            <span className="text-lg">Learn while having fun! 🌟</span>
+          <p className="text-base text-slate-300 max-w-3xl mx-auto">
+            Exercises for working, visual and episodic memory.
           </p>
         </motion.div>
 
@@ -238,39 +234,39 @@ export default function MemoryPage() {
           {memoryGames.map((game) => (
             <motion.div
               key={game.id}
-              className="bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer border-4 border-transparent hover:border-yellow-300"
+              className="rounded-lg p-6 transition-all duration-300 cursor-pointer border border-[#2d3748] bg-[#1f2046] hover:border-[#3b82f6]"
               variants={itemVariants}
-              whileHover={{ y: -12, scale: 1.03 }}
+              whileHover={{ y: -4, scale: 1.01 }}
               onClick={() => handleGameSelect(game.id)}>
 
-              <div className="flex items-center justify-between mb-6">
-                <div className={`w-16 h-16 rounded-3xl flex items-center justify-center text-white shadow-lg ${game.color}`}>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-md flex items-center justify-center bg-[#2d3748] text-white">
                   {game.icon}
                 </div>
-                <span className="text-sm bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full font-bold">
+                <span className="text-xs text-white/80 px-3 py-1 rounded-md bg-[#2d3748]">
                   {game.difficulty}
                 </span>
               </div>
 
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">
+              <h3 className="text-lg font-semibold text-white mb-2">
                 {game.title}
               </h3>
-              <p className="text-gray-600 text-base mb-6 leading-relaxed">
+              <p className="text-slate-300 text-sm mb-6 leading-relaxed">
                 {game.description}
               </p>
 
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2 text-sm text-gray-600 bg-gray-100 rounded-xl px-3 py-2">
-                  <Award className="w-5 h-5 text-yellow-500" />
-                  <span className="font-bold">Best: {game.bestScore}%</span>
+                <div className="flex items-center space-x-2 text-xs text-slate-300 bg-[#1a1b3e] rounded-md px-3 py-2 border border-[#2d3748]">
+                  <Award className="w-4 h-4 text-[#10b981]" />
+                  <span className="font-medium">Best: {game.bestScore}%</span>
                 </div>
                 <motion.button
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-2xl font-bold text-lg flex items-center space-x-2 shadow-lg hover:shadow-xl"
-                  whileHover={{ scale: 1.05, y: -2 }}
+                  className="bg-[#3b82f6] text-white px-5 py-3 rounded-md font-medium flex items-center space-x-2"
+                  whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <Play className="w-5 h-5" />
-                  <span>Let's Play!</span>
+                  <span>Start</span>
                 </motion.button>
               </div>
             </motion.div>
@@ -280,40 +276,40 @@ export default function MemoryPage() {
         {/* Statistics Section */}
         {gameResults.length > 0 && (
           <motion.section 
-            className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl shadow-xl p-8 border-4 border-yellow-200"
+            className="rounded-xl p-8 border border-[#2d3748] bg-[#1f2046]"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <h3 className="text-3xl font-bold text-gray-800 mb-6 flex items-center justify-center">
-              <Trophy className="w-8 h-8 mr-3 text-yellow-500" />
-              🏆 Your Amazing Progress! 🏆
+            <h3 className="text-xl font-medium text-white mb-4 flex items-center justify-center">
+              <Trophy className="w-5 h-5 mr-2 text-[#10b981]" />
+              Progress
             </h3>
             
             <div className="grid md:grid-cols-4 gap-6">
-              <div className="text-center bg-white rounded-2xl p-4 shadow-lg">
-                <div className="text-4xl font-bold text-blue-600 mb-2">
+              <div className="text-center rounded-md p-4 border border-[#2d3748] bg-[#1a1b3e]">
+                <div className="text-xl font-semibold text-white mb-2">
                   {gameResults.length}
                 </div>
-                <div className="text-sm text-gray-600 font-bold">Games Played</div>
+                <div className="text-xs text-slate-400 font-medium">Games Played</div>
               </div>
-              <div className="text-center bg-white rounded-2xl p-4 shadow-lg">
-                <div className="text-4xl font-bold text-emerald-600 mb-2">
+              <div className="text-center rounded-md p-4 border border-[#2d3748] bg-[#1a1b3e]">
+                <div className="text-xl font-semibold text-white mb-2">
                   {Math.round(gameResults.reduce((sum, r) => sum + r.accuracy, 0) / gameResults.length)}%
                 </div>
-                <div className="text-sm text-gray-600 font-bold">Average Accuracy</div>
+                <div className="text-xs text-slate-400 font-medium">Average Accuracy</div>
               </div>
-              <div className="text-center bg-white rounded-2xl p-4 shadow-lg">
-                <div className="text-4xl font-bold text-purple-600 mb-2">
+              <div className="text-center rounded-md p-4 border border-[#2d3748] bg-[#1a1b3e]">
+                <div className="text-xl font-semibold text_white mb-2">
                   {Math.round(gameResults.reduce((sum, r) => sum + r.memoryPower, 0) / gameResults.length)}
                 </div>
-                <div className="text-sm text-gray-600 font-bold">Memory Power</div>
+                <div className="text-xs text-slate-400 font-medium">Memory Power</div>
               </div>
-              <div className="text-center bg-white rounded-2xl p-4 shadow-lg">
-                <div className="text-4xl font-bold text-orange-600 mb-2">
+              <div className="text_center rounded-md p-4 border border-[#2d3748] bg-[#1a1b3e]">
+                <div className="text-xl font-semibold text-white mb-2">
                   {Math.round(gameResults.reduce((sum, r) => sum + r.cognitiveScore, 0) / gameResults.length)}
                 </div>
-                <div className="text-sm text-gray-600 font-bold">Brain Score</div>
+                <div className="text-xs text-slate-400 font-medium">Brain Score</div>
               </div>
             </div>
           </motion.section>

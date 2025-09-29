@@ -374,7 +374,7 @@ function SidebarFooter({ className, children, ...props }: React.ComponentProps<"
             <div className="flex justify-between"><span>Wellbeing</span><span>{scores.phq12.score} ({scores.phq12.severity})</span></div>
           )}
           {scores.gad7 && (
-            <div className="flex justify-between"><span>Anxiety</span><span>{scores.gad7.score} ({scores.gad7.severity})</span></div>
+            <div className="flex justify-between"><span>Cognitive</span><span>{scores.gad7.score} ({scores.gad7.severity})</span></div>
           )}
         </div>
       )}

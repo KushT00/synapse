@@ -67,28 +67,28 @@ export default function ProblemSolvingGame() {
   const currentPuzzleData = puzzles[currentPuzzle];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 via-teal-100 to-blue-100">
+    <div className="min-h-screen bg-[#1a1b3e] text-white">
       {/* Header */}
-      <div className="bg-white/90 backdrop-blur-sm shadow-lg border-b-4 border-green-200">
+      <div className="border-b border-[#2d3748] bg-[#1f2046]">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <motion.button
               onClick={handleBackToHome}
-              className="flex items-center space-x-2 bg-gradient-to-r from-green-400 to-teal-400 text-white px-4 py-2 rounded-full font-bold shadow-lg"
+              className="flex items-center space-x-2 bg-[#3b82f6] text-white px-4 py-2 rounded-md font-medium"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <ArrowLeft size={20} />
-              <span>Back to Home</span>
+              <span>Back</span>
             </motion.button>
             
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-gray-800">🧩 Puzzle Master</h1>
-              <p className="text-gray-600">Solve puzzles and become smarter!</p>
+              <h1 className="text-2xl font-semibold text-white">Problem Solving</h1>
+              <p className="text-slate-300 text-sm">Reasoning and planning drills</p>
             </div>
 
-            <div className="bg-gradient-to-r from-green-400 to-teal-400 text-white px-4 py-2 rounded-full font-bold">
-              Score: {score}/{puzzles.length}
+            <div className="text-white/90 px-4 py-2 rounded-md font-medium bg-[#2d3748]">
+              Score {score}/{puzzles.length}
             </div>
           </div>
         </div>
@@ -100,20 +100,20 @@ export default function ProblemSolvingGame() {
           {!gameCompleted ? (
             <motion.div
               key="puzzle"
-              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border-4 border-green-200"
+              className="rounded-xl p-8 border border-[#2d3748] bg-[#1f2046]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
               {/* Progress Bar */}
               <div className="mb-8">
-                <div className="flex justify-between text-sm text-gray-600 mb-2">
+                <div className="flex justify-between text-xs text-slate-300 mb-2">
                   <span>Question {currentPuzzle + 1} of {puzzles.length}</span>
                   <span>{Math.round(((currentPuzzle + 1) / puzzles.length) * 100)}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
+                <div className="w-full bg-[#2d3748] rounded-full h-2">
                   <motion.div
-                    className="bg-gradient-to-r from-green-400 to-teal-400 h-3 rounded-full"
+                    className="bg-[#10b981] h-2 rounded-full"
                     initial={{ width: 0 }}
                     animate={{ width: `${((currentPuzzle + 1) / puzzles.length) * 100}%` }}
                     transition={{ duration: 0.5 }}
@@ -129,8 +129,7 @@ export default function ProblemSolvingGame() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="text-6xl mb-4">🧩</div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                <h2 className="text-xl font-semibold text-white mb-6">
                   {currentPuzzleData.question}
                 </h2>
               </motion.div>
@@ -141,7 +140,7 @@ export default function ProblemSolvingGame() {
                   <motion.button
                     key={index}
                     onClick={() => handleAnswer(option)}
-                    className="bg-gradient-to-r from-green-100 to-teal-100 hover:from-green-200 hover:to-teal-200 border-4 border-green-300 rounded-2xl p-6 text-lg font-bold text-gray-800 shadow-lg transition-all duration-200"
+                    className="rounded-md p-5 text-sm font-medium text-white transition-all duration-200 border border-[#2d3748] bg-[#2d3748] hover:border-[#3b82f6]"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                     initial={{ opacity: 0, y: 20 }}
@@ -156,16 +155,15 @@ export default function ProblemSolvingGame() {
           ) : (
             <motion.div
               key="results"
-              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border-4 border-green-200 text-center"
+              className="rounded-xl p-8 border border-[#2d3748] bg-[#1f2046] text-center"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
             >
-              <div className="text-8xl mb-6">🎉</div>
-              <h2 className="text-4xl font-bold text-gray-800 mb-4">
-                Puzzle Complete!
+              <h2 className="text-2xl font-semibold text-white mb-2">
+                Session complete
               </h2>
-              <p className="text-xl text-gray-600 mb-6">
-                You scored {score} out of {puzzles.length}!
+              <p className="text-sm text-slate-300 mb-6">
+                Score {score} / {puzzles.length}
               </p>
               
               {score >= 3 ? (
@@ -174,10 +172,9 @@ export default function ProblemSolvingGame() {
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.5 }}
                 >
-                  <div className="bg-gradient-to-r from-green-400 to-teal-400 text-white p-6 rounded-2xl mb-6">
-                    <div className="text-4xl mb-2">🏆</div>
-                    <h3 className="text-2xl font-bold mb-2">Excellent Work!</h3>
-                    <p>You're a puzzle master!</p>
+                  <div className="text-white p-6 rounded-md mb-6 border border-[#2d3748] bg-[#1a1b3e]">
+                    <h3 className="text-lg font-medium mb-1">Well done</h3>
+                    <p className="text-sm text-slate-300">Solid performance.</p>
                   </div>
                   
                   <motion.button
@@ -191,18 +188,17 @@ export default function ProblemSolvingGame() {
                       }
                       router.push("/");
                     }}
-                    className="bg-gradient-to-r from-green-500 to-teal-500 text-white font-bold py-4 px-8 rounded-full text-xl shadow-2xl"
+                    className="bg-[#10b981] text-white font-medium py-3 px-6 rounded-md"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    Complete Module! 🚀
+                    Complete module
                   </motion.button>
                 </motion.div>
               ) : (
-                <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white p-6 rounded-2xl mb-6">
-                  <div className="text-4xl mb-2">💪</div>
-                  <h3 className="text-2xl font-bold mb-2">Good Try!</h3>
-                  <p>Keep practicing to improve!</p>
+                <div className="text-white p-6 rounded-md mb-6 border border-[#2d3748] bg-[#1a1b3e]">
+                  <h3 className="text-lg font-medium mb-1">Good effort</h3>
+                  <p className="text-sm text-slate-300">Keep practicing to improve.</p>
                 </div>
               )}
             </motion.div>
