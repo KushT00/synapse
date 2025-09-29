@@ -15,7 +15,7 @@ interface Answers {
   clockDrawing: string;
   patternMatch: number | null;
 }
-const MEMORY_WORDS = ["ABSTRACT", "BALLOT", "MODULE", "VECTOR"];
+const MEMORY_WORDS = ["ABSTRACT", "BALLOT", "MODULE"];
 
 
 const orientationQuestions = [
