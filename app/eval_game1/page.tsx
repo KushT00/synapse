@@ -337,7 +337,7 @@ export default function CognitiveAssessment() {
               <Brain className="w-6 h-6 text-indigo-600" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900">Cognitive Baseline Assessment</h1>
+              <h1 className="text-3xl font-bold text-slate-900">Baseline Assessment</h1>
               <p className="text-slate-600">MMSE-Inspired Screening Tool</p>
             </div>
           </div>
