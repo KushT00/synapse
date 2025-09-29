@@ -54,7 +54,6 @@ const data = {
       items: [
         { title: "🦜 Chat Buddy", url: "/dashboard/voice" },
         { title: "🧩 Fun World", url: "/dashboard/games" },
-        { title: "😊 Mood Check", url: "/dashboard/mood-check" },
         { title: "🏆 Rewards", url: "/dashboard/reward" },
         { title: "🧘 Meditation Hall", url: "/dashboard/panchayat" },
         { title: "📑 Resource", url: "/dashboard/resource" },

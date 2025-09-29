@@ -14,6 +14,40 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
   const [sessionMode, setSessionMode] = useState('in-person');
   const [isAnonymous, setIsAnonymous] = useState(false);
 
+  function toTwentyFourHour(timeLabel: string) {
+    if (!timeLabel) return { hours: 0, minutes: 0 };
+    const match = timeLabel.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (!match) return { hours: 0, minutes: 0 };
+    let hours = parseInt(match[1], 10);
+    const minutes = parseInt(match[2], 10);
+    const meridiem = match[3].toUpperCase();
+    if (meridiem === 'PM' && hours !== 12) hours += 12;
+    if (meridiem === 'AM' && hours === 12) hours = 0;
+    return { hours, minutes };
+  }
+
+  function formatAsGoogleDateRange(start: Date, durationMinutes: number) {
+    const end = new Date(start.getTime() + durationMinutes * 60 * 1000);
+    const format = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\..+/, '');
+    return `${format(start)}Z/${format(end)}Z`;
+  }
+
+  function buildGoogleCalendarUrl(options: {
+    title: string;
+    description?: string;
+    location?: string;
+    start: Date;
+    durationMinutes: number;
+  }) {
+    const base = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
+    const params = new URLSearchParams();
+    params.set('text', options.title);
+    if (options.description) params.set('details', options.description);
+    if (options.location) params.set('location', options.location);
+    params.set('dates', formatAsGoogleDateRange(options.start, options.durationMinutes));
+    return `${base}&${params.toString()}`;
+  }
+
   const counselors = [
    
     {
@@ -69,8 +103,26 @@ const AppointmentBooking: React.FC<AppointmentBookingProps> = ({ userRole }) => 
   ];
 
   const handleBookAppointment = () => {
-    // Handle appointment booking logic
-    alert('Appointment booked successfully! You will receive a confirmation SMS and email shortly.');
+    if (!selectedDate || !selectedTime) return;
+
+    const { hours, minutes } = toTwentyFourHour(selectedTime);
+    const [year, month, day] = selectedDate.split('-').map((v) => parseInt(v, 10));
+    const startLocal = new Date(year, (month || 1) - 1, day || 1, hours, minutes, 0);
+
+    const counselorName = counselors.find((c) => c.id === selectedCounselor)?.name || 'Counselor';
+    const sessionTitle = appointmentType === 'group' ? 'Group Counseling Session' : appointmentType === 'crisis' ? 'Crisis Counseling Session' : `Counseling with ${counselorName}`;
+    const description = `Session mode: ${sessionMode}${isAnonymous ? ' (Anonymous booking)' : ''}`;
+    const location = sessionMode === 'in-person' ? 'Campus Counseling Center' : sessionMode === 'video' ? 'Video call link to be shared' : 'Phone call';
+
+    const url = buildGoogleCalendarUrl({
+      title: sessionTitle,
+      description,
+      location,
+      start: startLocal,
+      durationMinutes: 60,
+    });
+
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
