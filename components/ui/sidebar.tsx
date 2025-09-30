@@ -374,11 +374,9 @@ function SidebarFooter({ className, children, ...props }: React.ComponentProps<"
             <div className="flex justify-between"><span>MINI COG</span><span>{scores.phq12.score} ({scores.phq12.severity})</span></div>
           )}
           {scores.gad7 && (
-<<<<<<< HEAD
-            <div className="flex justify-between"><span>Cognitive</span><span>{scores.gad7.score} ({scores.gad7.severity})</span></div>
-=======
+
             <div className="flex justify-between"><span>MoCA</span><span>{scores.gad7.score} ({scores.gad7.severity})</span></div>
->>>>>>> 23b531eaa40c5ee0e638809523104685dcdc2959
+
           )}
         </div>
       )}
