@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Heart, 
     Brain, 
@@ -60,63 +60,94 @@ import {
     Monitor,
     Smartphone,
     Tablet,
-    Laptop
+    Laptop,
+    Navigation,
+    Home,
+    AlertOctagon,
+    UserCheck,
+    Pill,
+    ClipboardList,
+    History,
+    Navigation2
 } from 'lucide-react';
 
-const MentalHealthDashboard = () => {
-    const [selectedChild, setSelectedChild] = useState('Satva');
+const FamilyDementiaDashboard = () => {
+    const [selectedMember, setSelectedMember] = useState('Rajesh Kumar');
     const [showTherapistLink, setShowTherapistLink] = useState(false);
     const [therapistLink, setTherapistLink] = useState('');
     const [copied, setCopied] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
+    const [userLocation, setUserLocation] = useState({ lat: 19.0760, lng: 72.8777 }); // Mumbai coordinates
+    const [locationHistory, setLocationHistory] = useState<Array<{lat: number, lng: number, timestamp: string}>>([]);
 
-    // Comprehensive data for mental health tracking
-    const childData = {
-        name: selectedChild,
-        overallWellness: 78, // Overall mental wellness score
-        weeklyImprovement: 8, // Improvement this week
-        streak: 5, // Days of consistent mood tracking
-        sessionsCompleted: 18,
-        totalSessions: 25,
-        lastSession: '3 hours ago',
-        stressLevel: 3, // 1-5 scale (1 = very low, 5 = very high)
-        anxietyLevel: 2, // 1-5 scale
-        depressionLevel: 2, // 1-5 scale
-        lastLogin: '2 hours ago',
-        totalTimeSpent: '24h 35m',
-        deviceType: 'Mobile',
-        location: 'Home',
-        batteryLevel: 85,
-        networkStrength: 4
+    // Comprehensive data for dementia patient tracking
+    const patientData = {
+        name: selectedMember,
+        age: 72,
+        condition: 'Early-stage Alzheimer\'s',
+        cognitiveScore: 68, // MMSE score out of 100
+        weeklyChange: -3, // Cognitive decline this week
+        medicationCompliance: 85, // Percentage
+        lastMedicationTime: '2 hours ago',
+        safetyScore: 82, // Overall safety score
+        wanderingRisk: 'Moderate', // Low, Moderate, High
+        confusionLevel: 2, // 1-5 scale
+        memoryRetention: 65, // Percentage
+        lastCheckIn: '45 minutes ago',
+        deviceType: 'Smartphone',
+        currentLocation: 'Home - Living Room',
+        lastKnownLocation: { address: '123 MG Road, Mumbai', time: '10 minutes ago' },
+        batteryLevel: 78,
+        networkStrength: 4,
+        heartRate: 72,
+        stepCount: 1240,
+        isInSafeZone: true,
+        emergencyContacts: [
+            { name: 'Priya Kumar (Daughter)', phone: '+91 98765 43210', relation: 'Primary Caregiver' },
+            { name: 'Dr. Sharma', phone: '+91 98765 12345', relation: 'Physician' }
+        ]
     };
 
-    // EEG Data with detailed metrics
-    const eegData = {
-        currentSession: {
-            alpha: 12.5, // Hz
-            beta: 18.3,  // Hz
-            theta: 6.8,  // Hz
-            delta: 2.1,  // Hz
-            gamma: 35.2, // Hz
-            timestamp: '2024-01-15 14:30:25'
+    // Simulate real-time location updates
+    useEffect(() => {
+        const interval = setInterval(() => {
+            // Simulate slight location changes (in real app, this would come from GPS)
+            setUserLocation(prev => ({
+                lat: prev.lat + (Math.random() - 0.5) * 0.001,
+                lng: prev.lng + (Math.random() - 0.5) * 0.001
+            }));
+        }, 10000); // Update every 10 seconds
+        
+        return () => clearInterval(interval);
+    }, []);
+
+    // Cognitive & Health Data with detailed metrics
+    const cognitiveData = {
+        currentAssessment: {
+            orientation: 7, // Out of 10
+            memory: 6,  // Out of 10
+            attention: 5,  // Out of 10
+            language: 8,  // Out of 10
+            visuospatial: 6, // Out of 10
+            timestamp: '2025-09-30 11:30:00'
         },
-        averageToday: {
-            alpha: 11.8,
-            beta: 17.9,
-            theta: 7.2,
-            delta: 2.3,
-            gamma: 34.1
+        weeklyAverage: {
+            orientation: 7.2,
+            memory: 6.5,
+            attention: 5.8,
+            language: 8.1,
+            visuospatial: 6.2
         },
-        stressIndicators: {
-            highBeta: 22.1, // High beta indicates stress
-            thetaBetaRatio: 0.38, // Lower ratio = higher stress
-            alphaThetaRatio: 1.74, // Lower ratio = higher stress
-            coherence: 0.65 // Brain coherence (0-1)
+        behavioralIndicators: {
+            agitation: 2, // 1-5 scale
+            confusion: 3, // 1-5 scale
+            sleepQuality: 6, // Out of 10
+            socialEngagement: 7 // Out of 10
         },
         alerts: [
-            { type: 'high_stress', time: '14:25', level: 'critical', message: 'Stress level exceeded threshold' },
-            { type: 'anxiety_spike', time: '13:45', level: 'warning', message: 'Anxiety levels rising' },
-            { type: 'attention_low', time: '12:30', level: 'info', message: 'Attention levels below normal' }
+            { type: 'location_alert', time: '11:45', level: 'warning', message: 'Patient left safe zone boundary' },
+            { type: 'medication_missed', time: '10:30', level: 'critical', message: 'Morning medication not taken' },
+            { type: 'confusion_detected', time: '09:15', level: 'info', message: 'Increased confusion detected via app interaction' }
         ]
     };
 
@@ -183,23 +214,24 @@ const MentalHealthDashboard = () => {
         }
     ];
 
-    const mentalHealthAreas = [
-        { name: 'Cognitive', score: 82, level: childData.stressLevel, icon: Shield, color: 'from-orange-400 to-red-500', bgColor: 'bg-orange-50', textColor: 'text-orange-600' },
-        { name: 'Cognitive', score: 75, level: childData.anxietyLevel, icon: Heart, color: 'from-blue-400 to-indigo-500', bgColor: 'bg-blue-50', textColor: 'text-blue-600' },
-        { name: 'Mood Stability', score: 88, level: childData.depressionLevel, icon: Smile, color: 'from-green-400 to-emerald-500', bgColor: 'bg-green-50', textColor: 'text-green-600' },
-        { name: 'Coping Skills', score: 71, level: 3, icon: Brain, color: 'from-purple-400 to-violet-500', bgColor: 'bg-purple-50', textColor: 'text-purple-600' }
+    const cognitiveAreas = [
+        { name: 'Memory', score: 65, level: 3, icon: Brain, color: 'from-purple-400 to-violet-500', bgColor: 'bg-purple-50', textColor: 'text-purple-600' },
+        { name: 'Orientation', score: 70, level: 2, icon: MapPin, color: 'from-blue-400 to-indigo-500', bgColor: 'bg-blue-50', textColor: 'text-blue-600' },
+        { name: 'Communication', score: 80, level: 2, icon: MessageCircle, color: 'from-green-400 to-emerald-500', bgColor: 'bg-green-50', textColor: 'text-green-600' },
+        { name: 'Daily Activities', score: 72, level: 3, icon: Activity, color: 'from-orange-400 to-red-500', bgColor: 'bg-orange-50', textColor: 'text-orange-600' }
     ];
 
-    const recentAchievements = [
-        { title: 'Cognitive Buster', description: 'Used breathing techniques effectively', icon: Shield, date: 'Today' },
-        { title: 'Mood Booster', description: 'Completed 3 positive activities today', icon: Sun, date: 'Yesterday' },
-        { title: 'Cognitive Warrior', description: 'Managed episode successfully', icon: Heart, date: '2 days ago' }
+    const recentActivities = [
+        { title: 'Medication Taken', description: 'Morning medications completed on time', icon: Pill, date: 'Today, 8:00 AM' },
+        { title: 'Memory Exercise', description: 'Completed photo recognition game', icon: Brain, date: 'Today, 9:30 AM' },
+        { title: 'Safe Return Home', description: 'Returned from morning walk safely', icon: Home, date: 'Today, 10:15 AM' }
     ];
 
     const weeklyGoals = [
-        { title: 'Daily mood check-ins', completed: 5, total: 7, color: 'bg-emerald-500' },
-        { title: 'Practice relaxation techniques', completed: 4, total: 5, color: 'bg-blue-500' },
-        { title: 'Complete cognitive exercises', completed: 3, total: 4, color: 'bg-purple-500' }
+        { title: 'Medication adherence', completed: 6, total: 7, color: 'bg-emerald-500' },
+        { title: 'Cognitive exercises', completed: 4, total: 5, color: 'bg-blue-500' },
+        { title: 'Social interactions', completed: 3, total: 4, color: 'bg-purple-500' },
+        { title: 'Physical activity (walks)', completed: 5, total: 7, color: 'bg-orange-500' }
     ];
 
     // Generate unique UUID for therapist link
@@ -242,18 +274,18 @@ const MentalHealthDashboard = () => {
                                 <Heart className="w-6 h-6 text-white" />
                             </div>
                             <div>
-                                <h1 className="text-3xl font-bold text-slate-800">Parent Dashboard</h1>
-                                <p className="text-slate-600">Monitor your child's mental health and wellness journey</p>
+                                <h1 className="text-3xl font-bold text-slate-800">Family Care Dashboard</h1>
+                                <p className="text-slate-600">Monitor and support your loved one with dementia</p>
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
                             <select
-                                value={selectedChild}
-                                onChange={(e) => setSelectedChild(e.target.value)}
+                                value={selectedMember}
+                                onChange={(e) => setSelectedMember(e.target.value)}
                                 className="px-4 py-2 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white shadow-sm"
                             >
-                                <option value="Satva">Satva</option>
-                                <option value="Kush">Kush</option>
+                                <option value="Rajesh Kumar">Rajesh Kumar (Father)</option>
+                                <option value="Sunita Devi">Sunita Devi (Mother)</option>
                             </select>
                             <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
                                 <Users className="w-5 h-5 text-white" />
@@ -263,13 +295,13 @@ const MentalHealthDashboard = () => {
                     
                     {/* Navigation Tabs */}
                     <div className="mt-6">
-                        <div className="flex space-x-1 bg-slate-100 p-1 rounded-xl">
+                        <div className="flex space-x-1 bg-slate-100 p-1 rounded-xl overflow-x-auto">
                             {[
                                 { id: 'overview', label: 'Overview', icon: BarChart3 },
-                                { id: 'eeg', label: 'EEG Data', icon: Brain },
-                                { id: 'alerts', label: 'Alerts & Triggers', icon: Bell },
-                                { id: 'analytics', label: 'Analytics', icon: LineChart },
-                                { id: 'visits', label: 'Visit Tracking', icon: ActivityIcon }
+                                { id: 'location', label: 'Live Location', icon: MapPin },
+                                { id: 'cognitive', label: 'Cognitive Health', icon: Brain },
+                                { id: 'alerts', label: 'Alerts & Safety', icon: Bell },
+                                { id: 'analytics', label: 'Analytics', icon: LineChart }
                             ].map((tab) => {
                                 const IconComponent = tab.icon;
                                 return (
@@ -301,14 +333,14 @@ const MentalHealthDashboard = () => {
                         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
                             <div className="flex items-center justify-between mb-6">
                                 <div>
-                                    <h2 className="text-2xl font-bold text-slate-800 mb-2">How is {childData.name} feeling?</h2>
-                                    <p className="text-slate-600">Overall mental wellness this week</p>
+                                    <h2 className="text-2xl font-bold text-slate-800 mb-2">{patientData.name}'s Health Status</h2>
+                                    <p className="text-slate-600">{patientData.condition} - Cognitive Score</p>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-4xl font-bold text-slate-800">{childData.overallWellness}%</div>
-                                    <div className="flex items-center text-emerald-600 text-sm font-medium">
-                                        <TrendingUp className="w-4 h-4 mr-1" />
-                                        +{childData.weeklyImprovement}% this week
+                                    <div className="text-4xl font-bold text-slate-800">{patientData.cognitiveScore}%</div>
+                                    <div className="flex items-center text-orange-600 text-sm font-medium">
+                                        <TrendingDown className="w-4 h-4 mr-1" />
+                                        {patientData.weeklyChange}% this week
                                     </div>
                                 </div>
                             </div>
@@ -325,62 +357,62 @@ const MentalHealthDashboard = () => {
                                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                         />
                                         <path
-                                            className="text-emerald-500"
+                                            className="text-blue-500"
                                             stroke="currentColor"
                                             strokeWidth="3"
                                             strokeLinecap="round"
                                             fill="none"
-                                            strokeDasharray={`${childData.overallWellness}, 100`}
+                                            strokeDasharray={`${patientData.cognitiveScore}, 100`}
                                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                         />
                                     </svg>
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="text-center">
-                                            <div className="text-2xl font-bold text-slate-800">{childData.overallWellness}%</div>
-                                            <div className="text-xs text-slate-500">Wellness</div>
+                                            <div className="text-2xl font-bold text-slate-800">{patientData.cognitiveScore}%</div>
+                                            <div className="text-xs text-slate-500">MMSE Score</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Mental Health Levels */}
+                            {/* Health Indicators */}
                             <div className="grid grid-cols-3 gap-4 mb-6">
-                                <div className="text-center p-4 bg-orange-50 rounded-2xl border border-orange-100">
-                                    <div className="text-2xl font-bold text-orange-600">{childData.stressLevel}/5</div>
-                                    <div className="text-sm text-orange-600">Cognitive Level</div>
+                                <div className="text-center p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                                    <div className="text-2xl font-bold text-emerald-600">{patientData.medicationCompliance}%</div>
+                                    <div className="text-sm text-emerald-600">Medication</div>
                                 </div>
                                 <div className="text-center p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                                    <div className="text-2xl font-bold text-blue-600">{childData.anxietyLevel}/5</div>
-                                    <div className="text-sm text-blue-600">Cognitive Level</div>
+                                    <div className="text-2xl font-bold text-blue-600">{patientData.safetyScore}%</div>
+                                    <div className="text-sm text-blue-600">Safety Score</div>
                                 </div>
-                                <div className="text-center p-4 bg-green-50 rounded-2xl border border-green-100">
-                                    <div className="text-2xl font-bold text-green-600">{childData.depressionLevel}/5</div>
-                                    <div className="text-sm text-green-600">Mood Level</div>
+                                <div className="text-center p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                                    <div className="text-2xl font-bold text-orange-600">{patientData.wanderingRisk}</div>
+                                    <div className="text-sm text-orange-600">Wander Risk</div>
                                 </div>
                             </div>
 
                             {/* Quick Stats */}
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="text-center p-4 bg-slate-50 rounded-2xl">
-                                    <div className="text-2xl font-bold text-slate-800">{childData.streak}</div>
-                                    <div className="text-sm text-slate-600">Day Streak</div>
+                                    <div className="text-2xl font-bold text-slate-800">{patientData.heartRate}</div>
+                                    <div className="text-sm text-slate-600">Heart Rate</div>
                                 </div>
                                 <div className="text-center p-4 bg-slate-50 rounded-2xl">
-                                    <div className="text-2xl font-bold text-slate-800">{childData.sessionsCompleted}</div>
-                                    <div className="text-sm text-slate-600">Sessions Done</div>
+                                    <div className="text-2xl font-bold text-slate-800">{patientData.stepCount}</div>
+                                    <div className="text-sm text-slate-600">Steps Today</div>
                                 </div>
                                 <div className="text-center p-4 bg-slate-50 rounded-2xl">
-                                    <div className="text-2xl font-bold text-slate-800">{Math.round((childData.sessionsCompleted / childData.totalSessions) * 100)}%</div>
-                                    <div className="text-sm text-slate-600">Completion</div>
+                                    <div className="text-2xl font-bold text-slate-800">{patientData.memoryRetention}%</div>
+                                    <div className="text-sm text-slate-600">Memory</div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Mental Health Areas Overview */}
+                        {/* Cognitive Areas Overview */}
                         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-                            <h3 className="text-xl font-bold text-slate-800 mb-6">Mental Health Areas</h3>
+                            <h3 className="text-xl font-bold text-slate-800 mb-6">Cognitive Function Areas</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {mentalHealthAreas.map((area, index) => {
+                                {cognitiveAreas.map((area, index) => {
                                     const IconComponent = area.icon;
                                     const getLevelText = (level: number) => {
                                         if (level <= 2) return 'Low';
@@ -421,9 +453,9 @@ const MentalHealthDashboard = () => {
                             </div>
                         </div>
 
-                        {/* Weekly Mental Health Goals */}
+                        {/* Weekly Care Goals */}
                         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-                            <h3 className="text-xl font-bold text-slate-800 mb-6">This Week's Wellness Goals</h3>
+                            <h3 className="text-xl font-bold text-slate-800 mb-6">This Week's Care Goals</h3>
                             <div className="space-y-4">
                                 {weeklyGoals.map((goal, index) => (
                                     <div key={index} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
@@ -449,21 +481,21 @@ const MentalHealthDashboard = () => {
                     {/* Right Column - Insights & Actions */}
                     <div className="space-y-6">
                         
-                        {/* Recent Mental Health Achievements */}
+                        {/* Recent Activities */}
                         <div className="bg-white rounded-3xl p-6 shadow-xl border border-slate-100">
-                            <h3 className="text-lg font-bold text-slate-800 mb-4">Recent Wellness Achievements</h3>
+                            <h3 className="text-lg font-bold text-slate-800 mb-4">Recent Activities</h3>
                             <div className="space-y-4">
-                                {recentAchievements.map((achievement, index) => {
-                                    const IconComponent = achievement.icon;
+                                {recentActivities.map((activity, index) => {
+                                    const IconComponent = activity.icon;
                                     return (
                                         <div key={index} className="flex items-start space-x-3 p-3 bg-slate-50 rounded-2xl">
-                                            <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
                                                 <IconComponent className="w-4 h-4 text-white" />
                                             </div>
                                             <div className="flex-1">
-                                                <h4 className="font-semibold text-slate-800 text-sm">{achievement.title}</h4>
-                                                <p className="text-xs text-slate-600">{achievement.description}</p>
-                                                <p className="text-xs text-slate-500 mt-1">{achievement.date}</p>
+                                                <h4 className="font-semibold text-slate-800 text-sm">{activity.title}</h4>
+                                                <p className="text-xs text-slate-600">{activity.description}</p>
+                                                <p className="text-xs text-slate-500 mt-1">{activity.date}</p>
                                             </div>
                                         </div>
                                     );
@@ -477,8 +509,8 @@ const MentalHealthDashboard = () => {
                             <div className="space-y-3">
                                 <button className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
                                     <div className="flex items-center space-x-3">
-                                        <Heart className="w-5 h-5 text-blue-600" />
-                                        <span className="font-medium text-slate-800">Mood Check-in</span>
+                                        <Phone className="w-5 h-5 text-blue-600" />
+                                        <span className="font-medium text-slate-800">Call {patientData.name}</span>
                                     </div>
                                     <ChevronRight className="w-4 h-4 text-slate-400" />
                                 </button>
@@ -496,153 +528,263 @@ const MentalHealthDashboard = () => {
                                 
                                 <button className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
                                     <div className="flex items-center space-x-3">
-                                        <Activity className="w-5 h-5 text-purple-600" />
-                                        <span className="font-medium text-slate-800">Relaxation Exercises</span>
+                                        <Pill className="w-5 h-5 text-purple-600" />
+                                        <span className="font-medium text-slate-800">Medication Reminder</span>
                                     </div>
                                     <ChevronRight className="w-4 h-4 text-slate-400" />
                                 </button>
                                 
                                 <button className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
                                     <div className="flex items-center space-x-3">
-                                        <Calendar className="w-5 h-5 text-orange-600" />
-                                        <span className="font-medium text-slate-800">View Wellness Report</span>
+                                        <MapPin className="w-5 h-5 text-orange-600" />
+                                        <span className="font-medium text-slate-800">View Live Location</span>
                                     </div>
                                     <ChevronRight className="w-4 h-4 text-slate-400" />
                                 </button>
                             </div>
                         </div>
 
-                        {/* Daily Wellness Tip */}
-                        <div className="bg-gradient-to-r from-blue-400 to-purple-500 rounded-3xl p-6 text-white shadow-xl">
+                        {/* Safety Status */}
+                        <div className={`rounded-3xl p-6 text-white shadow-xl ${
+                            patientData.isInSafeZone 
+                                ? 'bg-gradient-to-r from-emerald-400 to-green-500' 
+                                : 'bg-gradient-to-r from-red-400 to-orange-500'
+                        }`}>
                             <div className="flex items-center space-x-3 mb-3">
-                                <Heart className="w-6 h-6" />
-                                <h3 className="text-lg font-bold">Daily Wellness Tip</h3>
+                                <Shield className="w-6 h-6" />
+                                <h3 className="text-lg font-bold">Safety Status</h3>
                             </div>
                             <p className="text-sm leading-relaxed">
-                                "Deep breathing exercises for just 5 minutes can help improve cognitive state significantly."
+                                {patientData.isInSafeZone 
+                                    ? `${patientData.name} is currently in the safe zone. Last check-in: ${patientData.lastCheckIn}` 
+                                    : `Alert: ${patientData.name} has left the designated safe zone!`
+                                }
                             </p>
                         </div>
 
-                        {/* Last Session Info */}
+                        {/* Emergency Contacts */}
                         <div className="bg-white rounded-3xl p-6 shadow-xl border border-slate-100">
-                            <h3 className="text-lg font-bold text-slate-800 mb-4">Last Session</h3>
-                            <div className="flex items-center space-x-3">
-                                <div className="w-10 h-10 bg-gradient-to-r from-green-400 to-emerald-500 rounded-xl flex items-center justify-center">
-                                    <CheckCircle className="w-5 h-5 text-white" />
-                                </div>
-                                <div>
-                                    <p className="font-medium text-slate-800">Stress Management</p>
-                                    <p className="text-sm text-slate-600">Completed {childData.lastSession}</p>
-                                    <p className="text-sm text-emerald-600 font-medium">Mood: Improved</p>
-                                </div>
+                            <h3 className="text-lg font-bold text-slate-800 mb-4">Emergency Contacts</h3>
+                            <div className="space-y-3">
+                                {patientData.emergencyContacts.map((contact, idx) => (
+                                    <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+                                        <div>
+                                            <p className="font-medium text-slate-800 text-sm">{contact.name}</p>
+                                            <p className="text-xs text-slate-600">{contact.relation}</p>
+                                        </div>
+                                        <button className="p-2 bg-blue-100 rounded-lg hover:bg-blue-200 transition-colors">
+                                            <Phone className="w-4 h-4 text-blue-600" />
+                                        </button>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
                 </div>
                 )}
 
-                {/* EEG Data Tab */}
-                {activeTab === 'eeg' && (
+                {/* Live Location Tab */}
+                {activeTab === 'location' && (
                     <div className="space-y-6">
-                        {/* EEG Real-time Data */}
+                        {/* Location Map */}
                         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-2xl font-bold text-slate-800">EEG Real-time Data</h2>
+                                <h2 className="text-2xl font-bold text-slate-800">Live Location Tracking</h2>
                                 <div className="flex items-center space-x-2 text-sm text-slate-600">
                                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                                     <span>Live</span>
+                                    <span className="text-xs text-slate-500">• Updated 10s ago</span>
+                                </div>
+                            </div>
+                            
+                            {/* Map Container */}
+                            <div className="relative w-full h-96 bg-slate-100 rounded-2xl overflow-hidden mb-6">
+                                {/* Placeholder Map - Replace with actual map library like Leaflet or Google Maps */}
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="text-center">
+                                        <MapPin className="w-16 h-16 text-blue-500 mx-auto mb-4 animate-bounce" />
+                                        <p className="text-lg font-semibold text-slate-700">Live Location Map</p>
+                                        <p className="text-sm text-slate-500 mt-2">Lat: {userLocation.lat.toFixed(6)}, Lng: {userLocation.lng.toFixed(6)}</p>
+                                        <p className="text-xs text-slate-400 mt-4 max-w-md mx-auto">
+                                            Integrate with Google Maps, Leaflet, or Mapbox for production
+                                        </p>
+                                    </div>
+                                </div>
+                                {/* Safe Zone Indicator */}
+                                <div className="absolute top-4 right-4 bg-white rounded-xl p-3 shadow-lg">
+                                    <div className="flex items-center space-x-2">
+                                        <div className={`w-3 h-3 rounded-full ${
+                                            patientData.isInSafeZone ? 'bg-green-500' : 'bg-red-500'
+                                        }`}></div>
+                                        <span className="text-sm font-medium text-slate-700">
+                                            {patientData.isInSafeZone ? 'In Safe Zone' : 'Outside Safe Zone'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Location Details */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm font-medium text-blue-600">Current Location</span>
+                                        <MapPin className="w-4 h-4 text-blue-600" />
+                                    </div>
+                                    <div className="text-lg font-bold text-blue-800">{patientData.currentLocation}</div>
+                                    <div className="text-xs text-blue-600 mt-1">{patientData.lastKnownLocation.address}</div>
+                                </div>
+                                
+                                <div className="bg-green-50 p-6 rounded-2xl border border-green-100">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm font-medium text-green-600">Battery Level</span>
+                                        <Battery className="w-4 h-4 text-green-600" />
+                                    </div>
+                                    <div className="text-lg font-bold text-green-800">{patientData.batteryLevel}%</div>
+                                    <div className="text-xs text-green-600 mt-1">Phone battery status</div>
+                                </div>
+                                
+                                <div className="bg-purple-50 p-6 rounded-2xl border border-purple-100">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm font-medium text-purple-600">Last Update</span>
+                                        <Clock className="w-4 h-4 text-purple-600" />
+                                    </div>
+                                    <div className="text-lg font-bold text-purple-800">{patientData.lastKnownLocation.time}</div>
+                                    <div className="text-xs text-purple-600 mt-1">GPS signal: Strong</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Location History */}
+                        <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
+                            <h3 className="text-xl font-bold text-slate-800 mb-6">Location History (Today)</h3>
+                            <div className="space-y-3">
+                                {[
+                                    { time: '11:45 AM', location: 'Left Home', status: 'warning' },
+                                    { time: '11:30 AM', location: 'Home - Living Room', status: 'safe' },
+                                    { time: '10:15 AM', location: 'Returned from Park', status: 'safe' },
+                                    { time: '09:30 AM', location: 'Morning Walk - Local Park', status: 'safe' },
+                                    { time: '08:00 AM', location: 'Home - Bedroom', status: 'safe' }
+                                ].map((entry, idx) => (
+                                    <div key={idx} className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+                                        <div className="flex items-center space-x-3">
+                                            <div className={`w-2 h-2 rounded-full ${
+                                                entry.status === 'warning' ? 'bg-orange-500' : 'bg-green-500'
+                                            }`}></div>
+                                            <div>
+                                                <p className="font-medium text-slate-800 text-sm">{entry.location}</p>
+                                                <p className="text-xs text-slate-500">{entry.time}</p>
+                                            </div>
+                                        </div>
+                                        <MapPin className="w-4 h-4 text-slate-400" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Cognitive Health Tab */}
+                {activeTab === 'cognitive' && (
+                    <div className="space-y-6">
+                        {/* Cognitive Assessment Data */}
+                        <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-slate-800">Cognitive Assessment</h2>
+                                <div className="flex items-center space-x-2 text-sm text-slate-600">
+                                    <Clock className="w-4 h-4" />
+                                    <span>Last assessed: {cognitiveData.currentAssessment.timestamp}</span>
                                 </div>
                             </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
                                 <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-blue-600">Alpha</span>
-                                        <Brain className="w-4 h-4 text-blue-600" />
+                                        <span className="text-sm font-medium text-blue-600">Orientation</span>
+                                        <MapPin className="w-4 h-4 text-blue-600" />
                                     </div>
-                                    <div className="text-2xl font-bold text-blue-800">{eegData.currentSession.alpha} Hz</div>
-                                    <div className="text-xs text-blue-600">Relaxed state</div>
-                                </div>
-                                
-                                <div className="bg-red-50 p-6 rounded-2xl border border-red-100">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-red-600">Beta</span>
-                                        <Activity className="w-4 h-4 text-red-600" />
-                                    </div>
-                                    <div className="text-2xl font-bold text-red-800">{eegData.currentSession.beta} Hz</div>
-                                    <div className="text-xs text-red-600">Active thinking</div>
+                                    <div className="text-2xl font-bold text-blue-800">{cognitiveData.currentAssessment.orientation}/10</div>
+                                    <div className="text-xs text-blue-600">Time & place awareness</div>
                                 </div>
                                 
                                 <div className="bg-purple-50 p-6 rounded-2xl border border-purple-100">
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-purple-600">Theta</span>
-                                        <Moon className="w-4 h-4 text-purple-600" />
+                                        <span className="text-sm font-medium text-purple-600">Memory</span>
+                                        <Brain className="w-4 h-4 text-purple-600" />
                                     </div>
-                                    <div className="text-2xl font-bold text-purple-800">{eegData.currentSession.theta} Hz</div>
-                                    <div className="text-xs text-purple-600">Deep relaxation</div>
-                                </div>
-                                
-                                <div className="bg-green-50 p-6 rounded-2xl border border-green-100">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-green-600">Delta</span>
-                                        <Sun className="w-4 h-4 text-green-600" />
-                                    </div>
-                                    <div className="text-2xl font-bold text-green-800">{eegData.currentSession.delta} Hz</div>
-                                    <div className="text-xs text-green-600">Deep sleep</div>
+                                    <div className="text-2xl font-bold text-purple-800">{cognitiveData.currentAssessment.memory}/10</div>
+                                    <div className="text-xs text-purple-600">Recall ability</div>
                                 </div>
                                 
                                 <div className="bg-orange-50 p-6 rounded-2xl border border-orange-100">
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-orange-600">Gamma</span>
-                                        <Zap className="w-4 h-4 text-orange-600" />
+                                        <span className="text-sm font-medium text-orange-600">Attention</span>
+                                        <Eye className="w-4 h-4 text-orange-600" />
                                     </div>
-                                    <div className="text-2xl font-bold text-orange-800">{eegData.currentSession.gamma} Hz</div>
-                                    <div className="text-xs text-orange-600">High focus</div>
+                                    <div className="text-2xl font-bold text-orange-800">{cognitiveData.currentAssessment.attention}/10</div>
+                                    <div className="text-xs text-orange-600">Focus & concentration</div>
+                                </div>
+                                
+                                <div className="bg-green-50 p-6 rounded-2xl border border-green-100">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm font-medium text-green-600">Language</span>
+                                        <MessageCircle className="w-4 h-4 text-green-600" />
+                                    </div>
+                                    <div className="text-2xl font-bold text-green-800">{cognitiveData.currentAssessment.language}/10</div>
+                                    <div className="text-xs text-green-600">Communication skills</div>
+                                </div>
+                                
+                                <div className="bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm font-medium text-indigo-600">Visuospatial</span>
+                                        <Eye className="w-4 h-4 text-indigo-600" />
+                                    </div>
+                                    <div className="text-2xl font-bold text-indigo-800">{cognitiveData.currentAssessment.visuospatial}/10</div>
+                                    <div className="text-xs text-indigo-600">Spatial awareness</div>
                                 </div>
                             </div>
 
-                            {/* Stress Indicators */}
+                            {/* Behavioral Indicators */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="bg-slate-50 p-6 rounded-2xl">
-                                    <h3 className="text-lg font-semibold text-slate-800 mb-4">Stress Indicators</h3>
+                                    <h3 className="text-lg font-semibold text-slate-800 mb-4">Behavioral Indicators</h3>
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">High Beta</span>
-                                            <span className="text-lg font-bold text-red-600">{eegData.stressIndicators.highBeta} Hz</span>
+                                            <span className="text-sm text-slate-600">Agitation Level</span>
+                                            <span className="text-lg font-bold text-orange-600">{cognitiveData.behavioralIndicators.agitation}/5</span>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">Theta/Beta Ratio</span>
-                                            <span className="text-lg font-bold text-orange-600">{eegData.stressIndicators.thetaBetaRatio}</span>
+                                            <span className="text-sm text-slate-600">Confusion Level</span>
+                                            <span className="text-lg font-bold text-red-600">{cognitiveData.behavioralIndicators.confusion}/5</span>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">Alpha/Theta Ratio</span>
-                                            <span className="text-lg font-bold text-blue-600">{eegData.stressIndicators.alphaThetaRatio}</span>
+                                            <span className="text-sm text-slate-600">Sleep Quality</span>
+                                            <span className="text-lg font-bold text-blue-600">{cognitiveData.behavioralIndicators.sleepQuality}/10</span>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">Brain Coherence</span>
-                                            <span className="text-lg font-bold text-green-600">{eegData.stressIndicators.coherence}</span>
+                                            <span className="text-sm text-slate-600">Social Engagement</span>
+                                            <span className="text-lg font-bold text-green-600">{cognitiveData.behavioralIndicators.socialEngagement}/10</span>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div className="bg-slate-50 p-6 rounded-2xl">
-                                    <h3 className="text-lg font-semibold text-slate-800 mb-4">Today's Averages</h3>
+                                    <h3 className="text-lg font-semibold text-slate-800 mb-4">Weekly Averages</h3>
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">Alpha</span>
-                                            <span className="text-lg font-bold text-blue-600">{eegData.averageToday.alpha} Hz</span>
+                                            <span className="text-sm text-slate-600">Orientation</span>
+                                            <span className="text-lg font-bold text-blue-600">{cognitiveData.weeklyAverage.orientation}/10</span>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">Beta</span>
-                                            <span className="text-lg font-bold text-red-600">{eegData.averageToday.beta} Hz</span>
+                                            <span className="text-sm text-slate-600">Memory</span>
+                                            <span className="text-lg font-bold text-purple-600">{cognitiveData.weeklyAverage.memory}/10</span>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">Theta</span>
-                                            <span className="text-lg font-bold text-purple-600">{eegData.averageToday.theta} Hz</span>
+                                            <span className="text-sm text-slate-600">Attention</span>
+                                            <span className="text-lg font-bold text-orange-600">{cognitiveData.weeklyAverage.attention}/10</span>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">Delta</span>
-                                            <span className="text-lg font-bold text-green-600">{eegData.averageToday.delta} Hz</span>
+                                            <span className="text-sm text-slate-600">Language</span>
+                                            <span className="text-lg font-bold text-green-600">{cognitiveData.weeklyAverage.language}/10</span>
                                         </div>
                                     </div>
                                 </div>
@@ -651,14 +793,14 @@ const MentalHealthDashboard = () => {
                     </div>
                 )}
 
-                {/* Alerts & Triggers Tab */}
+                {/* Alerts & Safety Tab */}
                 {activeTab === 'alerts' && (
                     <div className="space-y-6">
                         {/* Current Alerts */}
                         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-                            <h2 className="text-2xl font-bold text-slate-800 mb-6">Recent Alerts</h2>
+                            <h2 className="text-2xl font-bold text-slate-800 mb-6">Recent Safety Alerts</h2>
                             <div className="space-y-4">
-                                {eegData.alerts.map((alert, index) => (
+                                {cognitiveData.alerts.map((alert: any, index: number) => (
                                     <div key={index} className={`p-4 rounded-2xl border-l-4 ${
                                         alert.level === 'critical' ? 'bg-red-50 border-red-500' :
                                         alert.level === 'warning' ? 'bg-yellow-50 border-yellow-500' :
@@ -689,9 +831,9 @@ const MentalHealthDashboard = () => {
                             </div>
                         </div>
 
-                        {/* Trigger Actions */}
+                        {/* Safety Trigger Actions */}
                         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-                            <h2 className="text-2xl font-bold text-slate-800 mb-6">Trigger Actions</h2>
+                            <h2 className="text-2xl font-bold text-slate-800 mb-6">Automated Safety Triggers</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {triggerActions.map((trigger) => (
                                     <div key={trigger.id} className="p-6 bg-slate-50 rounded-2xl border border-slate-200">
@@ -720,25 +862,25 @@ const MentalHealthDashboard = () => {
                     <div className="space-y-6">
                         {/* Detailed Analytics */}
                         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-                            <h2 className="text-2xl font-bold text-slate-800 mb-6">Detailed Analytics</h2>
+                            <h2 className="text-2xl font-bold text-slate-800 mb-6">Health & Activity Analytics</h2>
                             
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                                 <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-blue-600">Total Time Spent</span>
-                                        <Timer className="w-4 h-4 text-blue-600" />
+                                        <span className="text-sm font-medium text-blue-600">Age</span>
+                                        <UserCheck className="w-4 h-4 text-blue-600" />
                                     </div>
-                                    <div className="text-2xl font-bold text-blue-800">{childData.totalTimeSpent}</div>
-                                    <div className="text-xs text-blue-600">All time</div>
+                                    <div className="text-2xl font-bold text-blue-800">{patientData.age} years</div>
+                                    <div className="text-xs text-blue-600">Patient age</div>
                                 </div>
                                 
                                 <div className="bg-green-50 p-6 rounded-2xl border border-green-100">
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-green-600">Last Login</span>
+                                        <span className="text-sm font-medium text-green-600">Last Check-in</span>
                                         <Clock className="w-4 h-4 text-green-600" />
                                     </div>
-                                    <div className="text-2xl font-bold text-green-800">{childData.lastLogin}</div>
-                                    <div className="text-xs text-green-600">Active now</div>
+                                    <div className="text-2xl font-bold text-green-800">{patientData.lastCheckIn}</div>
+                                    <div className="text-xs text-green-600">Active monitoring</div>
                                 </div>
                                 
                                 <div className="bg-purple-50 p-6 rounded-2xl border border-purple-100">
@@ -746,8 +888,8 @@ const MentalHealthDashboard = () => {
                                         <span className="text-sm font-medium text-purple-600">Device Type</span>
                                         <Smartphone className="w-4 h-4 text-purple-600" />
                                     </div>
-                                    <div className="text-2xl font-bold text-purple-800">{childData.deviceType}</div>
-                                    <div className="text-xs text-purple-600">Current session</div>
+                                    <div className="text-2xl font-bold text-purple-800">{patientData.deviceType}</div>
+                                    <div className="text-xs text-purple-600">Tracking device</div>
                                 </div>
                             </div>
 
@@ -757,39 +899,39 @@ const MentalHealthDashboard = () => {
                                     <div className="space-y-3">
                                         <div className="flex items-center justify-between">
                                             <span className="text-sm text-slate-600">Location</span>
-                                            <span className="text-sm font-medium text-slate-800">{childData.location}</span>
+                                            <span className="text-sm font-medium text-slate-800">{patientData.currentLocation}</span>
                                         </div>
                                         <div className="flex items-center justify-between">
                                             <span className="text-sm text-slate-600">Battery Level</span>
                                             <div className="flex items-center space-x-2">
                                                 <Battery className="w-4 h-4 text-slate-600" />
-                                                <span className="text-sm font-medium text-slate-800">{childData.batteryLevel}%</span>
+                                                <span className="text-sm font-medium text-slate-800">{patientData.batteryLevel}%</span>
                                             </div>
                                         </div>
                                         <div className="flex items-center justify-between">
                                             <span className="text-sm text-slate-600">Network Strength</span>
                                             <div className="flex items-center space-x-2">
                                                 <Signal className="w-4 h-4 text-slate-600" />
-                                                <span className="text-sm font-medium text-slate-800">{childData.networkStrength}/5</span>
+                                                <span className="text-sm font-medium text-slate-800">{patientData.networkStrength}/5</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div className="bg-slate-50 p-6 rounded-2xl">
-                                    <h3 className="text-lg font-semibold text-slate-800 mb-4">Session Details</h3>
+                                    <h3 className="text-lg font-semibold text-slate-800 mb-4">Health Metrics</h3>
                                     <div className="space-y-3">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">Sessions Completed</span>
-                                            <span className="text-sm font-medium text-slate-800">{childData.sessionsCompleted}/{childData.totalSessions}</span>
+                                            <span className="text-sm text-slate-600">Heart Rate</span>
+                                            <span className="text-sm font-medium text-slate-800">{patientData.heartRate} bpm</span>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">Completion Rate</span>
-                                            <span className="text-sm font-medium text-slate-800">{Math.round((childData.sessionsCompleted / childData.totalSessions) * 100)}%</span>
+                                            <span className="text-sm text-slate-600">Steps Today</span>
+                                            <span className="text-sm font-medium text-slate-800">{patientData.stepCount} steps</span>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <span className="text-sm text-slate-600">Current Streak</span>
-                                            <span className="text-sm font-medium text-slate-800">{childData.streak} days</span>
+                                            <span className="text-sm text-slate-600">Medication Compliance</span>
+                                            <span className="text-sm font-medium text-slate-800">{patientData.medicationCompliance}%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -798,8 +940,8 @@ const MentalHealthDashboard = () => {
                     </div>
                 )}
 
-                {/* Visit Tracking Tab */}
-                {activeTab === 'visits' && (
+                {/* App Usage Tracking - Hidden for now */}
+                {activeTab === 'usage' && (
                     <div className="space-y-6">
                         {/* Visit Statistics */}
                         <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
@@ -906,7 +1048,7 @@ const MentalHealthDashboard = () => {
                         
                         <div className="mb-6">
                             <p className="text-slate-600 mb-4">
-                                Share this secure link with your therapist to give them access to {childData.name}'s progress data:
+                                Share this secure link with the healthcare provider to give them access to {patientData.name}'s health data:
                             </p>
                             <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200">
                                 <div className="flex items-center justify-between">
@@ -953,4 +1095,4 @@ const MentalHealthDashboard = () => {
     );
 };
 
-export default MentalHealthDashboard;
+export default FamilyDementiaDashboard;

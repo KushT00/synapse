@@ -53,7 +53,7 @@ function HeroContent() {
       <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight tracking-tight">
         A Digital Psychological Intervention System for{' '}
         <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
-          Colleges
+          dementia care
         </span>
       </h1>
 
