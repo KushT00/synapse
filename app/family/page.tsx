@@ -598,28 +598,92 @@ const FamilyDementiaDashboard = () => {
                             </div>
                             
                             {/* Map Container */}
-                            <div className="relative w-full h-96 bg-slate-100 rounded-2xl overflow-hidden mb-6">
-                                {/* Placeholder Map - Replace with actual map library like Leaflet or Google Maps */}
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="text-center">
-                                        <MapPin className="w-16 h-16 text-blue-500 mx-auto mb-4 animate-bounce" />
-                                        <p className="text-lg font-semibold text-slate-700">Live Location Map</p>
-                                        <p className="text-sm text-slate-500 mt-2">Lat: {userLocation.lat.toFixed(6)}, Lng: {userLocation.lng.toFixed(6)}</p>
-                                        <p className="text-xs text-slate-400 mt-4 max-w-md mx-auto">
-                                            Integrate with Google Maps, Leaflet, or Mapbox for production
-                                        </p>
+                            <div className="relative w-full h-96 bg-gradient-to-br from-blue-50 via-slate-50 to-green-50 rounded-2xl overflow-hidden mb-6 border-2 border-slate-200">
+                                {/* Mock Map Grid Pattern */}
+                                <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgb(148, 163, 184)" strokeWidth="0.5" opacity="0.2"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="100%" height="100%" fill="url(#grid)" />
+                                </svg>
+                                
+                                {/* Mock Roads */}
+                                <div className="absolute top-1/3 left-0 right-0 h-0.5 bg-slate-300 opacity-40"></div>
+                                <div className="absolute top-2/3 left-0 right-0 h-0.5 bg-slate-300 opacity-40"></div>
+                                <div className="absolute left-1/4 top-0 bottom-0 w-0.5 bg-slate-300 opacity-40"></div>
+                                <div className="absolute left-3/4 top-0 bottom-0 w-0.5 bg-slate-300 opacity-40"></div>
+                                
+                                {/* Safe Zone Circle */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                    <div className={`w-64 h-64 rounded-full border-4 border-dashed ${
+                                        patientData.isInSafeZone ? 'border-green-400' : 'border-red-400'
+                                    } opacity-30`}></div>
+                                </div>
+                                
+                                {/* Patient Location Marker */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                    <div className="relative">
+                                        {/* Pulsing Circle */}
+                                        <div className={`absolute -inset-4 rounded-full ${
+                                            patientData.isInSafeZone ? 'bg-green-400' : 'bg-red-400'
+                                        } opacity-20 animate-ping`}></div>
+                                        
+                                        {/* Main Marker */}
+                                        <div className={`relative w-12 h-12 ${
+                                            patientData.isInSafeZone ? 'bg-green-500' : 'bg-red-500'
+                                        } rounded-full border-4 border-white shadow-xl flex items-center justify-center`}>
+                                            <Users className="w-6 h-6 text-white" />
+                                        </div>
+                                        
+                                        {/* Patient Name Label */}
+                                        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                            <div className="bg-white px-3 py-1 rounded-lg shadow-md border border-slate-200">
+                                                <p className="text-xs font-semibold text-slate-700">{patientData.name}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                
+                                {/* Mock Location Labels */}
+                                <div className="absolute top-6 left-6 bg-white bg-opacity-80 backdrop-blur-sm px-3 py-1 rounded-lg shadow-sm">
+                                    <p className="text-xs font-medium text-slate-600">🏠 Home</p>
+                                </div>
+                                <div className="absolute bottom-6 right-6 bg-white bg-opacity-80 backdrop-blur-sm px-3 py-1 rounded-lg shadow-sm">
+                                    <p className="text-xs font-medium text-slate-600">🏞️ Park</p>
+                                </div>
+                                
                                 {/* Safe Zone Indicator */}
-                                <div className="absolute top-4 right-4 bg-white rounded-xl p-3 shadow-lg">
+                                <div className="absolute top-4 right-4 bg-white rounded-xl p-3 shadow-lg z-10">
                                     <div className="flex items-center space-x-2">
-                                        <div className={`w-3 h-3 rounded-full ${
+                                        <div className={`w-3 h-3 rounded-full animate-pulse ${
                                             patientData.isInSafeZone ? 'bg-green-500' : 'bg-red-500'
                                         }`}></div>
                                         <span className="text-sm font-medium text-slate-700">
                                             {patientData.isInSafeZone ? 'In Safe Zone' : 'Outside Safe Zone'}
                                         </span>
                                     </div>
+                                </div>
+                                
+                                {/* Coordinates Display */}
+                                <div className="absolute bottom-4 left-4 bg-white rounded-xl p-3 shadow-lg z-10">
+                                    <div className="flex items-center space-x-2">
+                                        <MapPin className="w-4 h-4 text-blue-600" />
+                                        <span className="text-xs font-mono text-slate-600">
+                                            {userLocation.lat.toFixed(6)}, {userLocation.lng.toFixed(6)}
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                {/* Zoom Controls (Mock) */}
+                                <div className="absolute bottom-4 right-4 bg-white rounded-xl shadow-lg overflow-hidden z-10">
+                                    <button className="block px-3 py-2 hover:bg-slate-50 border-b border-slate-200 transition-colors">
+                                        <span className="text-lg font-bold text-slate-600">+</span>
+                                    </button>
+                                    <button className="block px-3 py-2 hover:bg-slate-50 transition-colors">
+                                        <span className="text-lg font-bold text-slate-600">−</span>
+                                    </button>
                                 </div>
                             </div>
                             
