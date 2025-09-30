@@ -52,10 +52,10 @@ const data = {
       icon: SquareTerminal,
       isActive: true,
       items: [
-        { title: "🦜 Chat Buddy", url: "/dashboard/voice" },
-        { title: "🧩 Fun World", url: "/dashboard/games" },
-        { title: "🏆 Rewards", url: "/dashboard/reward" },
-        { title: "🧘 Meditation Hall", url: "/dashboard/panchayat" },
+        { title: "🔊 Voice Therapist", url: "/dashboard/voice" },
+        { title: "🧩 Activites", url: "/dashboard/games" },
+        
+        { title: "🧘 VR Connect", url: "/dashboard/panchayat" },
         { title: "📑 Resource", url: "/dashboard/resource" },
         { title: "📝 planner", url: "/dashboard/planner" },
 

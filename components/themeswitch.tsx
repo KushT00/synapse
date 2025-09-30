@@ -3,16 +3,10 @@
 import * as React from "react"
 import { Sun, Moon, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useTheme } from "./theme-provider"
 
 export function ThemeSwitcher() {
-  const setTheme = (theme: string) => {
-    const root = window.document.documentElement
-    root.classList.remove("light", "dark", "colorblind")
-    if (theme !== "light") {
-      root.classList.add(theme)
-    }
-    localStorage.setItem("theme", theme)
-  }
+  const { setTheme } = useTheme()
 
   return (
     <div className="flex items-center justify-center gap-2 px-2 py-2">
